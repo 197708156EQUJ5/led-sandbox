@@ -1,0 +1,45 @@
+#pragma once
+
+#include <optional>
+#include <string>
+#include <variant>
+#include <vector>
+
+namespace sandbox
+{
+enum class SceneObjectType
+{
+    CIRCLE,
+    RECTANGLE,
+    TEXT
+};
+
+struct Position
+{
+    int x{0};
+    int y{0};
+};
+
+// Allows: missing, "na", "7x13B", or 12.
+using FontSize = std::variant<std::monostate, int, std::string>;
+
+struct SceneObject
+{
+    SceneObjectType sceneObjectType{SceneObjectType::CIRCLE};
+
+    Position position;
+    std::string color;
+
+    std::optional<int> radius;
+    std::optional<int> width;
+    std::optional<int> height;
+
+    std::optional<std::string> text;
+    FontSize fontSizeValue;
+};
+
+struct Scene
+{
+    std::vector<SceneObject> sceneObjects;
+};
+}

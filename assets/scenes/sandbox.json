@@ -1,0 +1,29 @@
+{
+  "objects": [
+    {
+      "type": "circle",
+      "position": { "x": 22, "y": 22 },
+      "radius": 20,
+      "color": "red"
+    },
+    {
+      "type": "circle",
+      "position": { "x": 22, "y": 22 },
+      "radius": 10,
+      "color": "green"
+    },
+    {
+      "type": "rectangle",
+      "position": { "x": 10, "y": 0 },
+      "width": 5,
+      "height": 3,
+      "color": "green"
+    },
+    {
+      "type": "text",
+      "position": { "x": 10, "y": 10 },
+      "text": "This is my sandbox",
+      "color": "yellow"
+    }
+  ]
+}
