@@ -1,15 +1,22 @@
+#include <atomic>
+#include <csignal>
+
 #include "sandbox/Application.hpp"
 
-#include <curl/curl.h>
+std::atomic<bool> gIsRunning{true};
+
+void handleSignal(int)
+{
+    gIsRunning = false;
+}
 
 int main()
 {
-    curl_global_init(CURL_GLOBAL_DEFAULT);
+    std::signal(SIGINT, handleSignal);   // Ctrl-C
+    std::signal(SIGTERM, handleSignal);  // kill <pid>
 
-    sandbox::Application app;
+    sandbox::Application app(gIsRunning);
     app.run();
-
-    curl_global_cleanup();
 
     return 0;
 }

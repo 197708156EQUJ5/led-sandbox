@@ -18,11 +18,13 @@ public:
     ~LedDisplay();
 
     void draw(std::vector<sandbox::Scene> scenes);
+    void close();
 
 private:
 
     void init();
     void filledCircle(int center_x, int center_y, int radius, const Color &color);
+    void drawBox(int left, int top, int right, int bottom, const Color& color);
     void clear();
     void present();
 

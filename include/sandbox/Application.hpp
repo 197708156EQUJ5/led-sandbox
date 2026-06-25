@@ -1,5 +1,6 @@
 #pragma once
 
+#include <atomic>
 #include <memory>
 #include <string>
 #include <vector>
@@ -14,7 +15,7 @@ namespace sandbox
 class Application
 {
 public:
-    Application();
+    explicit Application(const std::atomic<bool>& running);
     ~Application() = default;
 
     void run();
@@ -25,6 +26,7 @@ private:
     std::unique_ptr<sandbox::SceneFolderMonitor> mSceneFolderMonitor = nullptr;
     std::unique_ptr<sandbox::SceneParser> mParser = nullptr;
     std::vector<sandbox::Scene> mScenes {};
+    const std::atomic<bool>& mRunning;
 
     bool init();
 };

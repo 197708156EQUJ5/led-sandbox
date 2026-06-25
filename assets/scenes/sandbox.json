@@ -2,28 +2,121 @@
   "objects": [
     {
       "type": "circle",
-      "position": { "x": 22, "y": 22 },
-      "radius": 20,
+      "position": { "x": 16, "y": 5 },
+      "radius": 4,
+      "color": "green"
+    },
+    {
+      "type": "circle",
+      "position": { "x": 26, "y": 5 },
+      "radius": 4,
+      "color": "green"
+    },
+    {
+      "type": "circle",
+      "position": { "x": 36, "y": 5 },
+      "radius": 4,
+      "color": "green"
+    },
+    {
+      "type": "circle",
+      "position": { "x": 16, "y": 14 },
+      "radius": 4,
       "color": "red"
     },
     {
       "type": "circle",
-      "position": { "x": 22, "y": 22 },
-      "radius": 10,
+      "position": { "x": 26, "y": 14 },
+      "radius": 4,
+      "color": "red"
+    },
+    {
+      "type": "circle",
+      "position": { "x": 16, "y": 23 },
+      "radius": 4,
+      "color": "red"
+    },
+    {
+      "type": "circle",
+      "position": { "x": 26, "y": 23 },
+      "radius": 4,
+      "color": "red"
+    },
+    {
+      "type": "rectangle",
+      "position": { "x": 0, "y": 0 },
+      "width": 63,
+      "height": 63,
+      "color": "magenta"
+    },
+    {
+      "type": "text",
+      "position": { "x": 1, "y": 8 },
+      "text": "B:",
+      "color": "white"
+    },
+    {
+      "type": "text",
+      "position": { "x": 1, "y": 17 },
+      "text": "S:",
+      "color": "white"
+    },
+    {
+      "type": "text",
+      "position": { "x": 1, "y": 26 },
+      "text": "O:",
+      "color": "white"
+    },
+    {
+      "type": "text",
+      "position": { "x": 1, "y": 35 },
+      "text": "Skubal",
+      "color": "white"
+    },
+    {
+      "type": "text",
+      "position": { "x": 1, "y": 44 },
+      "text": "P:25",
+      "color": "white"
+    },
+    {
+      "type": "text",
+      "position": { "x": 1, "y": 53 },
+      "text": "Dominguez",
+      "color": "white"
+    },
+    {
+      "type": "text",
+      "position": { "x": 1, "y": 62 },
+      "text": "1 for 1",
+      "color": "white"
+    },
+    {
+      "type": "rectangle",
+      "position": { "x": 64, "y": 0 },
+      "width": 63,
+      "height": 63,
       "color": "green"
     },
     {
       "type": "rectangle",
-      "position": { "x": 10, "y": 0 },
-      "width": 5,
-      "height": 3,
+      "position": { "x": 86, "y": 20 },
+      "width": 20,
+      "height": 30,
+      "color,": "gold"
+    },
+    {
+      "type": "circle",
+      "position": { "x": 86, "y": 20 },
+      "radius": 3,
       "color": "green"
     },
     {
       "type": "text",
-      "position": { "x": 10, "y": 10 },
-      "text": "This is my sandbox",
-      "color": "yellow"
+      "position": { "x": 84, "y": 22 },
+      "text": "1",
+      "color": "white",
+      "fontSize": "5x8"
     }
   ]
 }

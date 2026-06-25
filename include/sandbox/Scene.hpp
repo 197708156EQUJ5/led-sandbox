@@ -20,9 +20,6 @@ struct Position
     int y{0};
 };
 
-// Allows: missing, "na", "7x13B", or 12.
-using FontSize = std::variant<std::monostate, int, std::string>;
-
 struct SceneObject
 {
     SceneObjectType sceneObjectType{SceneObjectType::CIRCLE};
@@ -35,7 +32,7 @@ struct SceneObject
     std::optional<int> height;
 
     std::optional<std::string> text;
-    FontSize fontSizeValue;
+    std::optional<std::string> fontSize;
 };
 
 struct Scene

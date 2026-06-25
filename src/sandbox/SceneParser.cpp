@@ -8,7 +8,6 @@
 
 using json = nlohmann::json;
 
-using sandbox::FontSize;
 using sandbox::Position;
 using sandbox::Scene;
 using sandbox::SceneObject;
@@ -80,26 +79,9 @@ Position SceneParser::parsePosition(const json& positionJson) const
     return position;
 }
 
-FontSize SceneParser::parseFontSize(const json& objectJson) const
+std::string SceneParser::parseFontSize(const json& objectJson) const
 {
-    if (!objectJson.contains("fontSize") || objectJson["fontSize"].is_null())
-    {
-        return std::monostate{};
-    }
-
-    const auto& fontSizeJson = objectJson["fontSize"];
-
-    if (fontSizeJson.is_number_integer())
-    {
-        return fontSizeJson.get<int>();
-    }
-
-    if (fontSizeJson.is_string())
-    {
-        return fontSizeJson.get<std::string>();
-    }
-
-    throw std::runtime_error("fontSize must be an integer, string, null, or omitted.");
+    return objectJson.get<std::string>();
 }
 
 SceneObject SceneParser::parseObject(const json& objectJson) const
@@ -109,7 +91,7 @@ SceneObject SceneParser::parseObject(const json& objectJson) const
     object.sceneObjectType = parseObjectType(objectJson.at("type").get<std::string>());
     object.position = parsePosition(objectJson.at("position"));
     object.color = objectJson.value("color", "");
-    object.fontSizeValue = parseFontSize(objectJson);
+    object.fontSize = parseFontSize(objectJson);
 
     switch (object.sceneObjectType)
     {

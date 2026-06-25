@@ -8,7 +8,8 @@ using sandbox::SceneParser;
 
 namespace sandbox
 {
-Application::Application() :
+Application::Application(const std::atomic<bool>& running) : 
+    mRunning(running),
     mParser(std::make_unique<SceneParser>()),
     mLedDisplay(std::make_unique<LedDisplay>())
 {
@@ -27,7 +28,7 @@ void Application::run()
 {
     const auto scene = mParser->parse("assets/scenes/sandbox.json");
 
-    while (true)
+    while (mRunning)
     {
         const auto changed_files = mSceneFolderMonitor->consumeChanges();
         
@@ -43,5 +44,7 @@ void Application::run()
         mLedDisplay->draw(mScenes);
         std::this_thread::sleep_for(std::chrono::seconds(5));
     }
+
+    mLedDisplay->close();
 }
 }

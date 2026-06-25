@@ -4,6 +4,8 @@
 
 #include "sandbox/Scene.hpp"
 
+using namespace rgb_matrix;
+
 namespace sandbox
 {
 
@@ -17,6 +19,13 @@ LedDisplay::LedDisplay() :
     mVeryLargeBoldFont(mFonts.get("9x18B"))
 {
     init();
+}
+
+LedDisplay::~LedDisplay()
+{
+    clear();
+    present();
+    delete mMatrix;
 }
 
 void LedDisplay::init()
@@ -34,9 +43,10 @@ void LedDisplay::init()
     mCanvas = mMatrix->CreateFrameCanvas();
 }
 
-LedDisplay::~LedDisplay()
+void LedDisplay::close()
 {
-    delete mMatrix;
+    clear();
+    present();
 }
 
 void LedDisplay::draw(std::vector<sandbox::Scene> scenes)
@@ -46,10 +56,38 @@ void LedDisplay::draw(std::vector<sandbox::Scene> scenes)
     {
         for (SceneObject object : scene.sceneObjects)
         {
-            if (object.sceneObjectType == SceneObjectType::CIRCLE)
+            switch (object.sceneObjectType)
             {
+            case SceneObjectType::CIRCLE:
                 filledCircle(object.position.x, object.position.y, object.radius.value_or(0), 
                     Colors::fromString(object.color));
+                break;
+            case SceneObjectType::RECTANGLE:
+                drawBox(object.position.x, object.position.y, object.position.x + object.width.value_or(0), 
+                    object.position.y + object.height.value_or(0), Colors::fromString(object.color));
+                break;
+            case SceneObjectType::TEXT:
+            {
+                const Font* font = &mScoreFont;
+                if (object.fontSize == "tiny")
+                {
+                    font = &mTinyFont;
+                }
+                else if (object.fontSize == "small")
+                {
+                    font = &mSmallFont;
+                }
+                else if (object.fontSize == "large")
+                {
+                    font = &mLargeFont;
+                }
+                DrawText(mCanvas, *font, object.position.x, object.position.y, Colors::fromString(object.color), 
+                    nullptr, object.text.value_or("").c_str());
+                break;
+            }
+            
+            default:
+                break;
             }
         }
     }
@@ -67,6 +105,21 @@ void LedDisplay::filledCircle(int center_x, int center_y, int radius, const Colo
                 mCanvas->SetPixel(center_x + x, center_y + y, color.r, color.g, color.b);
             }
         }
+    }
+}
+
+void LedDisplay::drawBox(int left, int top, int right, int bottom, const Color& color)
+{
+    for (int x = left; x <= right; ++x)
+    {
+        mCanvas->SetPixel(x, top, color.r, color.g, color.b);
+        mCanvas->SetPixel(x, bottom, color.r, color.g, color.b);
+    }
+
+    for (int y = top; y <= bottom; ++y)
+    {
+        mCanvas->SetPixel(left, y, color.r, color.g, color.b);
+        mCanvas->SetPixel(right, y, color.r, color.g, color.b);
     }
 }
 
