@@ -79,9 +79,14 @@ Position SceneParser::parsePosition(const json& positionJson) const
     return position;
 }
 
-std::string SceneParser::parseFontSize(const json& objectJson) const
+std::optional<std::string> SceneParser::parseFontSize(const json& objectJson) const
 {
-    return objectJson.get<std::string>();
+    if (!objectJson.contains("fontSize"))
+    {
+        return std::nullopt;
+    }
+
+    return objectJson.at("fontSize").get<std::string>();
 }
 
 SceneObject SceneParser::parseObject(const json& objectJson) const
