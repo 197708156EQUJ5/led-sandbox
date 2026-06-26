@@ -1,6 +1,7 @@
 #include "sandbox/LedDisplay.hpp"
 
 #include <vector>
+#include <utility>
 
 #include "sandbox/Scene.hpp"
 
@@ -9,16 +10,13 @@ using namespace rgb_matrix;
 namespace sandbox
 {
 
-LedDisplay::LedDisplay() :
-    mFonts(std::filesystem::current_path() / "assets" / "fonts"),
-    mTinyFont(mFonts.get("5x8")),
-    mSmallFont(mFonts.get("6x10")),
-    mScoreFont(mFonts.get("7x13B")),
-    mLargeFont(mFonts.get("9x18")),
-    mLargeBoldFont(mFonts.get("9x18B")),
-    mVeryLargeBoldFont(mFonts.get("9x18B"))
+LedDisplay::LedDisplay(RGBMatrix::Options options, std::map<std::string, rgb_matrix::Font*> fontMap) :
+    mFontMap(fontMap)
 {
-    init();
+    RuntimeOptions runtime_options;
+
+    mMatrix = RGBMatrix::CreateFromOptions(options, runtime_options);
+    mCanvas = mMatrix->CreateFrameCanvas();
 }
 
 LedDisplay::~LedDisplay()
@@ -26,21 +24,6 @@ LedDisplay::~LedDisplay()
     clear();
     present();
     delete mMatrix;
-}
-
-void LedDisplay::init()
-{
-    RGBMatrix::Options options;
-    options.rows = 64;
-    options.cols = 64;
-    options.chain_length = 2;
-    options.hardware_mapping = "regular";
-    options.disable_hardware_pulsing = true;
-
-    RuntimeOptions runtime_options;
-
-    mMatrix = RGBMatrix::CreateFromOptions(options, runtime_options);
-    mCanvas = mMatrix->CreateFrameCanvas();
 }
 
 void LedDisplay::close()
@@ -68,20 +51,8 @@ void LedDisplay::draw(std::vector<sandbox::Scene> scenes)
                 break;
             case SceneObjectType::TEXT:
             {
-                const Font* font = &mScoreFont;
-                if (object.fontSize == "tiny")
-                {
-                    font = &mTinyFont;
-                }
-                else if (object.fontSize == "small")
-                {
-                    font = &mSmallFont;
-                }
-                else if (object.fontSize == "large")
-                {
-                    font = &mLargeFont;
-                }
-                DrawText(mCanvas, *font, object.position.x, object.position.y, Colors::fromString(object.color), 
+                const Font& font = *mFontMap.at(object.fontSize.value_or("small"));
+                DrawText(mCanvas, font, object.position.x, object.position.y, Colors::fromString(object.color), 
                     nullptr, object.text.value_or("").c_str());
                 break;
             }
@@ -132,7 +103,6 @@ void LedDisplay::present()
 {
     mCanvas = mMatrix->SwapOnVSync(mCanvas);
 }
-
     
 } // namespace sandbox
 

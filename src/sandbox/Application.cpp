@@ -4,16 +4,18 @@
 #include <string>
 #include <thread>
 
+#include "sandbox/utils/FontLibrary.hpp"
+
 using sandbox::SceneParser;
 using sandbox::ApplicationConfig;
+using sandbox::utils::FontLibrary;
 using rgb_matrix::RGBMatrix;
 
 namespace sandbox
 {
 Application::Application(const std::atomic<bool>& running) : 
     mRunning(running),
-    mParser(std::make_unique<SceneParser>()),
-    mLedDisplay(std::make_unique<LedDisplay>())
+    mParser(std::make_unique<SceneParser>())
 {
     init();
 }
@@ -36,6 +38,15 @@ bool Application::init()
 
     mSceneFolderMonitor = std::make_unique<SceneFolderMonitor>(mWatchedFolder);
     mSceneFolderMonitor->start();
+
+    std::map<std::string, rgb_matrix::Font*> font_map;
+    std::unique_ptr<FontLibrary> font_library = std::make_unique<FontLibrary>(mConfig.fonts.folder);
+
+    for (auto const& [key, value] : mConfig.fonts.aliases)
+    {
+        font_map.emplace(key, &font_library->get(value));
+    }
+    mLedDisplay = std::make_unique<LedDisplay>(options, font_map);
 
     return true;
 }
