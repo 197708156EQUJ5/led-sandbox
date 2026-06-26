@@ -1,6 +1,8 @@
 #pragma once
 
 #include <filesystem>
+#include <string>
+#include <optional>
 
 #include <nlohmann/json.hpp>
 
@@ -17,7 +19,7 @@ public:
 private:
     SceneObjectType parseObjectType(const std::string& type) const;
     Position parsePosition(const nlohmann::json& positionJson) const;
-    FontSize parseFontSize(const nlohmann::json& objectJson) const;
+    std::optional<std::string> parseFontSize(const nlohmann::json& objectJson) const;
     SceneObject parseObject(const nlohmann::json& objectJson) const;
 };
 }

@@ -4,30 +4,50 @@
 #include <string>
 #include <thread>
 
+#include "sandbox/utils/FontLibrary.hpp"
+
 using sandbox::SceneParser;
+using sandbox::ApplicationConfig;
+using sandbox::utils::FontLibrary;
+using rgb_matrix::RGBMatrix;
 
 namespace sandbox
 {
-Application::Application() :
-    mParser(std::make_unique<SceneParser>()),
-    mLedDisplay(std::make_unique<LedDisplay>())
+Application::Application(const std::atomic<bool>& running) : 
+    mRunning(running),
+    mParser(std::make_unique<SceneParser>())
 {
     init();
 }
 
 bool Application::init()
 {
-    mSceneFolderMonitor = std::make_unique<SceneFolderMonitor>("assets/scenes");
+    mConfig = ApplicationConfig::load("config/led-display.toml");
+
+    RGBMatrix::Options options;
+    mConfig.rgbMatrix.applyTo(options);
+
+    mWatchedFolder = mConfig.data.jsonFolderWatcher.folder;
+
+    mSceneFolderMonitor = std::make_unique<SceneFolderMonitor>(mWatchedFolder);
     mSceneFolderMonitor->start();
+    
+    mLedDisplay = std::make_unique<LedDisplay>(options, mConfig.fonts);
+
+    if (!mLedDisplay->init())
+    {
+        std::cerr << "Failed to initialize LED display." << std::endl;
+        return false;
+    }
 
     return true;
 }
 
 void Application::run()
 {
-    const auto scene = mParser->parse("assets/scenes/sandbox.json");
+    const auto scene = mParser->parse(mWatchedFolder / "sandbox.json");
 
-    while (true)
+    while (mRunning)
     {
         const auto changed_files = mSceneFolderMonitor->consumeChanges();
         
@@ -43,5 +63,7 @@ void Application::run()
         mLedDisplay->draw(mScenes);
         std::this_thread::sleep_for(std::chrono::seconds(5));
     }
+
+    mLedDisplay->close();
 }
 }

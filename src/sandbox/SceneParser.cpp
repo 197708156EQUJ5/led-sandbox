@@ -8,7 +8,6 @@
 
 using json = nlohmann::json;
 
-using sandbox::FontSize;
 using sandbox::Position;
 using sandbox::Scene;
 using sandbox::SceneObject;
@@ -80,26 +79,14 @@ Position SceneParser::parsePosition(const json& positionJson) const
     return position;
 }
 
-FontSize SceneParser::parseFontSize(const json& objectJson) const
+std::optional<std::string> SceneParser::parseFontSize(const json& objectJson) const
 {
-    if (!objectJson.contains("fontSize") || objectJson["fontSize"].is_null())
+    if (!objectJson.contains("fontSize"))
     {
-        return std::monostate{};
+        return std::nullopt;
     }
 
-    const auto& fontSizeJson = objectJson["fontSize"];
-
-    if (fontSizeJson.is_number_integer())
-    {
-        return fontSizeJson.get<int>();
-    }
-
-    if (fontSizeJson.is_string())
-    {
-        return fontSizeJson.get<std::string>();
-    }
-
-    throw std::runtime_error("fontSize must be an integer, string, null, or omitted.");
+    return objectJson.at("fontSize").get<std::string>();
 }
 
 SceneObject SceneParser::parseObject(const json& objectJson) const
@@ -109,17 +96,19 @@ SceneObject SceneParser::parseObject(const json& objectJson) const
     object.sceneObjectType = parseObjectType(objectJson.at("type").get<std::string>());
     object.position = parsePosition(objectJson.at("position"));
     object.color = objectJson.value("color", "");
-    object.fontSizeValue = parseFontSize(objectJson);
+    object.fontSize = parseFontSize(objectJson);
 
     switch (object.sceneObjectType)
     {
         case SceneObjectType::CIRCLE:
             object.radius = objectJson.at("radius").get<int>();
+            object.fill = objectJson.at("fill").get<bool>();
             break;
 
         case SceneObjectType::RECTANGLE:
             object.width = objectJson.at("width").get<int>();
             object.height = objectJson.at("height").get<int>();
+            object.fill = objectJson.at("fill").get<bool>();
             break;
 
         case SceneObjectType::TEXT:

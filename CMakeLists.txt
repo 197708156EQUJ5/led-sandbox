@@ -12,9 +12,20 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 find_package(CURL REQUIRED)
 find_package(nlohmann_json REQUIRED)
 
+include(FetchContent)
+
+FetchContent_Declare(
+    tomlplusplus
+    GIT_REPOSITORY https://github.com/marzer/tomlplusplus.git
+    GIT_TAG v3.4.0
+)
+
+FetchContent_MakeAvailable(tomlplusplus)
+
 add_executable(sandbox
     src/main.cpp
     src/sandbox/Application.cpp
+    src/sandbox/ApplicationConfig.cpp
     src/sandbox/SceneParser.cpp
     src/sandbox/SceneFolderMonitor.cpp
     src/sandbox/LedDisplay.cpp
@@ -32,5 +43,6 @@ target_link_libraries(sandbox
     PRIVATE
         CURL::libcurl
         nlohmann_json::nlohmann_json
+        tomlplusplus::tomlplusplus
         ${RGB_MATRIX_DIR}/lib/librgbmatrix.a
 )

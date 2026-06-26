@@ -2,28 +2,181 @@
   "objects": [
     {
       "type": "circle",
-      "position": { "x": 22, "y": 22 },
-      "radius": 20,
-      "color": "red"
+      "position": { "x": 16, "y": 5 },
+      "radius": 4,
+      "color": "#00ff00",
+      "fill": true
     },
     {
       "type": "circle",
-      "position": { "x": 22, "y": 22 },
-      "radius": 10,
-      "color": "green"
+      "position": { "x": 26, "y": 5 },
+      "radius": 4,
+      "color": "#00ff00",
+      "fill": true
+    },
+    {
+      "type": "circle",
+      "position": { "x": 36, "y": 5 },
+      "radius": 4,
+      "color": "#00ff00",
+      "fill": false
+    },
+    {
+      "type": "circle",
+      "position": { "x": 16, "y": 14 },
+      "radius": 4,
+      "color": "#ff0000",
+      "fill": true
+    },
+    {
+      "type": "circle",
+      "position": { "x": 26, "y": 14 },
+      "radius": 4,
+      "color": "#ff0000",
+      "fill": true
+    },
+    {
+      "type": "circle",
+      "position": { "x": 16, "y": 23 },
+      "radius": 4,
+      "color": "#ff0000",
+      "fill": true
+    },
+    {
+      "type": "circle",
+      "position": { "x": 26, "y": 23 },
+      "radius": 4,
+      "color": "#ff0000",
+      "fill": false
     },
     {
       "type": "rectangle",
-      "position": { "x": 10, "y": 0 },
-      "width": 5,
-      "height": 3,
-      "color": "green"
+      "position": { "x": 0, "y": 0 },
+      "width": 63,
+      "height": 63,
+      "color": "#ff00ff",
+      "fill": false
     },
     {
       "type": "text",
-      "position": { "x": 10, "y": 10 },
-      "text": "This is my sandbox",
-      "color": "yellow"
+      "position": { "x": 1, "y": 8 },
+      "text": "B:",
+      "color": "#ffffff",
+      "fontSize": "small"
+    },
+    {
+      "type": "text",
+      "position": { "x": 1, "y": 17 },
+      "text": "S:",
+      "color": "#ffffff",
+      "fontSize": "small"
+    },
+    {
+      "type": "text",
+      "position": { "x": 1, "y": 26 },
+      "text": "O:",
+      "color": "#ffffff",
+      "fontSize": "small"
+    },
+    {
+      "type": "text",
+      "position": { "x": 1, "y": 35 },
+      "text": "Skubal",
+      "color": "#ffffff",
+      "fontSize": "small"
+    },
+    {
+      "type": "text",
+      "position": { "x": 1, "y": 44 },
+      "text": "P:25",
+      "color": "#ffffff",
+      "fontSize": "small"
+    },
+    {
+      "type": "text",
+      "position": { "x": 1, "y": 53 },
+      "text": "Dominguez",
+      "color": "#ffffff",
+      "fontSize": "small"
+    },
+    {
+      "type": "text",
+      "position": { "x": 1, "y": 62 },
+      "text": "1 for 1",
+      "color": "#ffffff",
+      "fontSize": "small"
+    },
+    {
+      "type": "rectangle",
+      "position": { "x": 64, "y": 0 },
+      "width": 63,
+      "height": 63,
+      "color": "#00ff00",
+      "fill": false
+    },
+    {
+      "type": "rectangle",
+      "position": { "x": 82, "y": 20 },
+      "width": 28,
+      "height": 36,
+      "color": "#ffd700",
+      "fill": true
+    },
+    {
+      "type": "circle",
+      "position": { "x": 86, "y": 19 },
+      "radius": 4,
+      "color": "#00ff00",
+      "fill": true
+    },
+    {
+      "type": "text",
+      "position": { "x": 84, "y": 22 },
+      "text": "1",
+      "color": "#000000",
+      "fontSize": "tiny"
+    },
+    {
+      "type": "circle",
+      "position": { "x": 94, "y": 33 },
+      "radius": 4,
+      "color": "#ff0000",
+      "fill": true
+    },
+    {
+      "type": "text",
+      "position": { "x": 93, "y": 36 },
+      "text": "2",
+      "color": "#000000",
+      "fontSize": "tiny"
+    },
+    {
+      "type": "circle",
+      "position": { "x": 105, "y": 19 },
+      "radius": 4,
+      "color": "#00ff00",
+      "fill": true
+    },
+    {
+      "type": "text",
+      "position": { "x": 103, "y": 22 },
+      "text": "3",
+      "color": "#ffffff",
+      "fontSize": "tiny"
+    },
+    {
+      "type": "circle",
+      "position": { "x": 115, "y": 33 },
+      "radius": 4,
+      "color": "#ff0000",
+      "fill": true
+    },
+    {
+      "type": "text",
+      "position": { "x": 113, "y": 36 },
+      "text": "4",
+      "color": "#ffffff",
+      "fontSize": "tiny"
     }
   ]
 }

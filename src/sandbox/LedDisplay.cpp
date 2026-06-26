@@ -1,42 +1,61 @@
 #include "sandbox/LedDisplay.hpp"
 
 #include <vector>
+#include <utility>
+#include <iostream>
 
 #include "sandbox/Scene.hpp"
+
+using namespace rgb_matrix;
 
 namespace sandbox
 {
 
-LedDisplay::LedDisplay() :
-    mFonts(std::filesystem::current_path() / "assets" / "fonts"),
-    mTinyFont(mFonts.get("5x8")),
-    mSmallFont(mFonts.get("6x10")),
-    mScoreFont(mFonts.get("7x13B")),
-    mLargeFont(mFonts.get("9x18")),
-    mLargeBoldFont(mFonts.get("9x18B")),
-    mVeryLargeBoldFont(mFonts.get("9x18B"))
+LedDisplay::LedDisplay(rgb_matrix::RGBMatrix::Options options, const sandbox::FontConfig& fontConfig) : 
+    mOptions(options),
+    mFontConfig(fontConfig),
+    mFontLibrary(fontConfig.folder)
 {
-    init();
+    for (const auto& [alias, fontName] : fontConfig.aliases)
+    {
+        mFontMap.emplace(alias, &mFontLibrary.get(fontName));
+    }
 }
 
-void LedDisplay::init()
+bool LedDisplay::init()
 {
-    RGBMatrix::Options options;
-    options.rows = 64;
-    options.cols = 64;
-    options.chain_length = 2;
-    options.hardware_mapping = "regular";
-    options.disable_hardware_pulsing = true;
+    rgb_matrix::RuntimeOptions runtime_options;
 
-    RuntimeOptions runtime_options;
+    mMatrix = rgb_matrix::RGBMatrix::CreateFromOptions(mOptions, runtime_options);
+    
+    if (mMatrix == nullptr)
+    {
+        return false;
+    }
 
-    mMatrix = RGBMatrix::CreateFromOptions(options, runtime_options);
     mCanvas = mMatrix->CreateFrameCanvas();
+
+    if (mCanvas == nullptr)
+    {
+        delete mMatrix;
+        mMatrix = nullptr;
+        return false;
+    }
+
+    return true;
 }
 
 LedDisplay::~LedDisplay()
 {
+    clear();
+    present();
     delete mMatrix;
+}
+
+void LedDisplay::close()
+{
+    clear();
+    present();
 }
 
 void LedDisplay::draw(std::vector<sandbox::Scene> scenes)
@@ -46,10 +65,48 @@ void LedDisplay::draw(std::vector<sandbox::Scene> scenes)
     {
         for (SceneObject object : scene.sceneObjects)
         {
-            if (object.sceneObjectType == SceneObjectType::CIRCLE)
+            int x = object.position.x;
+            int y = object.position.y;
+            bool is_filled = object.fill.value_or(false);
+            int r = std::stoi(object.color.substr(1, 2), nullptr, 16);
+            int g = std::stoi(object.color.substr(3, 2), nullptr, 16);
+            int b = std::stoi(object.color.substr(5, 2), nullptr, 16);
+            Color color = object.color.substr(0, 1) == "#" ? Color(r, g, b) : Colors::fromString(object.color);
+            switch (object.sceneObjectType)
             {
-                filledCircle(object.position.x, object.position.y, object.radius.value_or(0), 
-                    Colors::fromString(object.color));
+            case SceneObjectType::CIRCLE:
+            {
+                int radius = object.radius.value_or(0);
+                if (is_filled)
+                {
+                    filledCircle(x, y, radius, color);
+                }
+                else
+                {
+                    DrawCircle(mCanvas, x, y, radius, color);
+                }
+                break;
+            }
+            case SceneObjectType::RECTANGLE:
+            {
+                if (is_filled)
+                {
+                    fillBox(x, y, x + object.width.value_or(0), y + object.height.value_or(0), color);
+                }
+                else
+                {
+                    drawBox(x, y, x + object.width.value_or(0), y + object.height.value_or(0), color);
+                }
+                break;
+            }
+            case SceneObjectType::TEXT:            
+            {
+                const Font& font = *mFontMap.at(object.fontSize.value_or("small"));
+                DrawText(mCanvas, font, x, y, color, nullptr, object.text.value_or("").c_str());
+                break;
+            }            
+            default:
+                break;
             }
         }
     }
@@ -70,6 +127,23 @@ void LedDisplay::filledCircle(int center_x, int center_y, int radius, const Colo
     }
 }
 
+void LedDisplay::fillBox(int left, int top, int right, int bottom, const Color& color)
+{
+    for (int y = top; y <= bottom; ++y)
+    {
+        DrawLine(mCanvas, left, y, right, y, color);
+    }
+}
+
+void LedDisplay::drawBox(int left, int top, int right, int bottom, const Color& color)
+{
+    DrawLine(mCanvas, left, top, right, top, color);
+    DrawLine(mCanvas, left, bottom, right, bottom, color);
+
+    DrawLine(mCanvas, left, top, left, bottom, color);
+    DrawLine(mCanvas, right, top, right, bottom, color);
+}
+
 void LedDisplay::clear()
 {
     mCanvas->Clear();
@@ -79,7 +153,6 @@ void LedDisplay::present()
 {
     mCanvas = mMatrix->SwapOnVSync(mCanvas);
 }
-
     
 } // namespace sandbox
 

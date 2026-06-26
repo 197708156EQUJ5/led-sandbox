@@ -1,5 +1,6 @@
 #pragma once
 
+#include <atomic>
 #include <memory>
 #include <string>
 #include <vector>
@@ -8,23 +9,30 @@
 #include "sandbox/Scene.hpp"
 #include "sandbox/SceneParser.hpp"
 #include "sandbox/SceneFolderMonitor.hpp"
+#include "sandbox/ApplicationConfig.hpp"
 
 namespace sandbox
 {
 class Application
 {
 public:
-    Application();
+    explicit Application(const std::atomic<bool>& running);
     ~Application() = default;
 
     void run();
 
 private:
 
+    sandbox::ApplicationConfig mConfig;
+    rgb_matrix::RuntimeOptions mRuntimeOptions;
+    rgb_matrix::RGBMatrix* mMatrix = nullptr;
+    std::filesystem::path mWatchedFolder = "";
+
     std::unique_ptr<sandbox::LedDisplay> mLedDisplay = nullptr;
     std::unique_ptr<sandbox::SceneFolderMonitor> mSceneFolderMonitor = nullptr;
     std::unique_ptr<sandbox::SceneParser> mParser = nullptr;
     std::vector<sandbox::Scene> mScenes {};
+    const std::atomic<bool>& mRunning;
 
     bool init();
 };
