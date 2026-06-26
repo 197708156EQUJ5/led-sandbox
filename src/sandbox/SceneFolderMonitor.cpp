@@ -4,9 +4,7 @@
 
 namespace sandbox
 {
-SceneFolderMonitor::SceneFolderMonitor(
-    std::filesystem::path folder,
-    std::chrono::milliseconds pollInterval)
+SceneFolderMonitor::SceneFolderMonitor(std::filesystem::path folder, std::chrono::milliseconds pollInterval)
     : mFolder(std::move(folder)),
       mPollInterval(pollInterval)
 {

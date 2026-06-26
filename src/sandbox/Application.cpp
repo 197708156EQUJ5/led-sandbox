@@ -5,6 +5,8 @@
 #include <thread>
 
 using sandbox::SceneParser;
+using sandbox::ApplicationConfig;
+using rgb_matrix::RGBMatrix;
 
 namespace sandbox
 {
@@ -17,8 +19,22 @@ Application::Application(const std::atomic<bool>& running) :
 }
 
 bool Application::init()
-{
-    mSceneFolderMonitor = std::make_unique<SceneFolderMonitor>("assets/scenes");
+{        
+    mConfig = ApplicationConfig::load("config/led-display.toml");
+
+    RGBMatrix::Options options;
+    mConfig.rgbMatrix.applyTo(options);
+
+    mMatrix = RGBMatrix::CreateFromOptions(options, mRuntimeOptions);
+
+    if (mMatrix == nullptr)
+    {
+        return false;
+    }
+
+    mWatchedFolder = mConfig.data.jsonFolderWatcher.folder;
+
+    mSceneFolderMonitor = std::make_unique<SceneFolderMonitor>(mWatchedFolder);
     mSceneFolderMonitor->start();
 
     return true;
@@ -26,7 +42,7 @@ bool Application::init()
 
 void Application::run()
 {
-    const auto scene = mParser->parse("assets/scenes/sandbox.json");
+    const auto scene = mParser->parse(mWatchedFolder / "sandbox.json");
 
     while (mRunning)
     {
