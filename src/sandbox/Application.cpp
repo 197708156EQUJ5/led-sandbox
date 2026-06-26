@@ -21,7 +21,7 @@ Application::Application(const std::atomic<bool>& running) :
 }
 
 bool Application::init()
-{        
+{
     mConfig = ApplicationConfig::load("config/led-display.toml");
 
     RGBMatrix::Options options;
@@ -36,6 +36,7 @@ bool Application::init()
 
     if (mLedDisplay->init())
     {
+        std::cerr << "Failed to initialize LED display." << std::endl;
         return false;
     }
 
