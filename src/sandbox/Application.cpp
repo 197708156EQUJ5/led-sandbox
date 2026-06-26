@@ -27,26 +27,17 @@ bool Application::init()
     RGBMatrix::Options options;
     mConfig.rgbMatrix.applyTo(options);
 
-    mMatrix = RGBMatrix::CreateFromOptions(options, mRuntimeOptions);
-
-    if (mMatrix == nullptr)
-    {
-        return false;
-    }
-
     mWatchedFolder = mConfig.data.jsonFolderWatcher.folder;
 
     mSceneFolderMonitor = std::make_unique<SceneFolderMonitor>(mWatchedFolder);
     mSceneFolderMonitor->start();
+    
+    mLedDisplay = std::make_unique<LedDisplay>(options, mConfig.fonts);
 
-    std::map<std::string, rgb_matrix::Font*> font_map;
-    std::unique_ptr<FontLibrary> font_library = std::make_unique<FontLibrary>(mConfig.fonts.folder);
-
-    for (auto const& [key, value] : mConfig.fonts.aliases)
+    if (mLedDisplay->init())
     {
-        font_map.emplace(key, &font_library->get(value));
+        return false;
     }
-    mLedDisplay = std::make_unique<LedDisplay>(options, font_map);
 
     return true;
 }

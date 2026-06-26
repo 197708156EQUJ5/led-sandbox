@@ -10,13 +10,38 @@ using namespace rgb_matrix;
 namespace sandbox
 {
 
-LedDisplay::LedDisplay(RGBMatrix::Options options, std::map<std::string, rgb_matrix::Font*> fontMap) :
-    mFontMap(fontMap)
+LedDisplay::LedDisplay(rgb_matrix::RGBMatrix::Options options, const sandbox::FontConfig& fontConfig) : 
+    mOptions(options),
+    mFontConfig(fontConfig),
+    mFontLibrary(fontConfig.folder)
 {
-    RuntimeOptions runtime_options;
+    for (const auto& [alias, fontName] : fontConfig.aliases)
+    {
+        mFontMap.emplace(alias, &mFontLibrary.get(fontName));
+    }
+}
 
-    mMatrix = RGBMatrix::CreateFromOptions(options, runtime_options);
+bool LedDisplay::init()
+{
+    rgb_matrix::RuntimeOptions runtime_options;
+
+    mMatrix = rgb_matrix::RGBMatrix::CreateFromOptions(mOptions, runtime_options);
+    
+    if (mMatrix == nullptr)
+    {
+        return false;
+    }
+
     mCanvas = mMatrix->CreateFrameCanvas();
+
+    if (mCanvas == nullptr)
+    {
+        delete mMatrix;
+        mMatrix = nullptr;
+        return false;
+    }
+
+    return true;
 }
 
 LedDisplay::~LedDisplay()
