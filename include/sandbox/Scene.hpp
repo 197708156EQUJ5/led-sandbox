@@ -30,6 +30,7 @@ struct SceneObject
     std::optional<int> radius;
     std::optional<int> width;
     std::optional<int> height;
+    std::optional<bool> fill;
 
     std::optional<std::string> text;
     std::optional<std::string> fontSize;

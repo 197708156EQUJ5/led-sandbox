@@ -102,11 +102,13 @@ SceneObject SceneParser::parseObject(const json& objectJson) const
     {
         case SceneObjectType::CIRCLE:
             object.radius = objectJson.at("radius").get<int>();
+            object.fill = objectJson.at("fill").get<bool>();
             break;
 
         case SceneObjectType::RECTANGLE:
             object.width = objectJson.at("width").get<int>();
             object.height = objectJson.at("height").get<int>();
+            object.fill = objectJson.at("fill").get<bool>();
             break;
 
         case SceneObjectType::TEXT:

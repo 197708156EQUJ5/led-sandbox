@@ -26,6 +26,7 @@ public:
 private:
 
     void filledCircle(int center_x, int center_y, int radius, const Color &color);
+    void fillBox(int left, int top, int right, int bottom, const Color& color);
     void drawBox(int left, int top, int right, int bottom, const Color& color);
     void clear();
     void present();

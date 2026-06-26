@@ -34,7 +34,7 @@ bool Application::init()
     
     mLedDisplay = std::make_unique<LedDisplay>(options, mConfig.fonts);
 
-    if (mLedDisplay->init())
+    if (!mLedDisplay->init())
     {
         std::cerr << "Failed to initialize LED display." << std::endl;
         return false;

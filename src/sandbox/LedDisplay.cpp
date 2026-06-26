@@ -2,6 +2,7 @@
 
 #include <vector>
 #include <utility>
+#include <iostream>
 
 #include "sandbox/Scene.hpp"
 
@@ -64,24 +65,46 @@ void LedDisplay::draw(std::vector<sandbox::Scene> scenes)
     {
         for (SceneObject object : scene.sceneObjects)
         {
+            int x = object.position.x;
+            int y = object.position.y;
+            bool is_filled = object.fill.value_or(false);
+            int r = std::stoi(object.color.substr(1, 2), nullptr, 16);
+            int g = std::stoi(object.color.substr(3, 2), nullptr, 16);
+            int b = std::stoi(object.color.substr(5, 2), nullptr, 16);
+            Color color = object.color.substr(0, 1) == "#" ? Color(r, g, b) : Colors::fromString(object.color);
             switch (object.sceneObjectType)
             {
             case SceneObjectType::CIRCLE:
-                filledCircle(object.position.x, object.position.y, object.radius.value_or(0), 
-                    Colors::fromString(object.color));
-                break;
-            case SceneObjectType::RECTANGLE:
-                drawBox(object.position.x, object.position.y, object.position.x + object.width.value_or(0), 
-                    object.position.y + object.height.value_or(0), Colors::fromString(object.color));
-                break;
-            case SceneObjectType::TEXT:
             {
-                const Font& font = *mFontMap.at(object.fontSize.value_or("small"));
-                DrawText(mCanvas, font, object.position.x, object.position.y, Colors::fromString(object.color), 
-                    nullptr, object.text.value_or("").c_str());
+                int radius = object.radius.value_or(0);
+                if (is_filled)
+                {
+                    filledCircle(x, y, radius, color);
+                }
+                else
+                {
+                    DrawCircle(mCanvas, x, y, radius, color);
+                }
                 break;
             }
-            
+            case SceneObjectType::RECTANGLE:
+            {
+                if (is_filled)
+                {
+                    fillBox(x, y, x + object.width.value_or(0), y + object.height.value_or(0), color);
+                }
+                else
+                {
+                    drawBox(x, y, x + object.width.value_or(0), y + object.height.value_or(0), color);
+                }
+                break;
+            }
+            case SceneObjectType::TEXT:            
+            {
+                const Font& font = *mFontMap.at(object.fontSize.value_or("small"));
+                DrawText(mCanvas, font, x, y, color, nullptr, object.text.value_or("").c_str());
+                break;
+            }            
             default:
                 break;
             }
@@ -104,19 +127,21 @@ void LedDisplay::filledCircle(int center_x, int center_y, int radius, const Colo
     }
 }
 
-void LedDisplay::drawBox(int left, int top, int right, int bottom, const Color& color)
+void LedDisplay::fillBox(int left, int top, int right, int bottom, const Color& color)
 {
-    for (int x = left; x <= right; ++x)
-    {
-        mCanvas->SetPixel(x, top, color.r, color.g, color.b);
-        mCanvas->SetPixel(x, bottom, color.r, color.g, color.b);
-    }
-
     for (int y = top; y <= bottom; ++y)
     {
-        mCanvas->SetPixel(left, y, color.r, color.g, color.b);
-        mCanvas->SetPixel(right, y, color.r, color.g, color.b);
+        DrawLine(mCanvas, left, y, right, y, color);
     }
+}
+
+void LedDisplay::drawBox(int left, int top, int right, int bottom, const Color& color)
+{
+    DrawLine(mCanvas, left, top, right, top, color);
+    DrawLine(mCanvas, left, bottom, right, bottom, color);
+
+    DrawLine(mCanvas, left, top, left, bottom, color);
+    DrawLine(mCanvas, right, top, right, bottom, color);
 }
 
 void LedDisplay::clear()
