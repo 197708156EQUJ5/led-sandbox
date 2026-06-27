@@ -1,8 +1,10 @@
 #include "sandbox/comms/DisplayIpcServer.hpp"
 
+#include <sys/stat.h>
 #include <string>
 #include <iostream>
 #include <filesystem>
+#include <stdexcept>
 
 namespace sandbox::comms
 {
@@ -12,8 +14,14 @@ DisplayIpcServer::DisplayIpcServer(std::string ipcEndpoint) :
     mSocket(mContext, zmq::socket_type::pull)
 {
     std::cout << "endpoint: " << ipcEndpoint.data() << std::endl;
-    std::filesystem::remove("/tmp/led-display.sock");
-    mSocket.bind(ipcEndpoint.data());
+     mSocket.bind(ipcEndpoint);
+
+    const std::string socket_path = ipcEndpoint.substr(std::string("ipc://").size());
+
+    if (chmod(socket_path.c_str(), 0666) != 0)
+    {
+        throw std::runtime_error("Could not set IPC socket permissions.");
+    }
     std::cout << "after endpoint: " << ipcEndpoint.data() << std::endl;
 }
 

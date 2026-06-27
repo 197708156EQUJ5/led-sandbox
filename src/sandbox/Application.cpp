@@ -30,10 +30,20 @@ bool Application::init()
     RGBMatrix::Options options;
     mConfig.rgbMatrix.applyTo(options);
 
-    mWatchedFolder = mConfig.data.jsonFolderWatcher.folder;
-
-    mSceneFolderMonitor = std::make_unique<SceneFolderMonitor>(mWatchedFolder);
-    mSceneFolderMonitor->start();
+    switch (mConfig.data.method)
+    {
+        case config::DataIngestionMethod::ZMQ_IPC:
+            mDisplayIpcServer = std::make_unique<DisplayIpcServer>(
+                mConfig.data.zmqIpc.endpoint);
+            break;
+    
+        case config::DataIngestionMethod::FOLDER_WATCHER:
+            mWatchedFolder = mConfig.data.jsonFolderWatcher.folder;
+    
+            mSceneFolderMonitor = std::make_unique<SceneFolderMonitor>(mWatchedFolder);
+            mSceneFolderMonitor->start();
+            break;
+    }
     
     mLedDisplay = std::make_unique<LedDisplay>(options, mConfig.fonts);
 
@@ -42,8 +52,6 @@ bool Application::init()
         std::cerr << "Failed to initialize LED display." << std::endl;
         return false;
     }
-
-    mDisplayIpcServer = std::make_unique<DisplayIpcServer>(mConfig.data.zmqIpc.endpoint);
 
     return true;
 }
