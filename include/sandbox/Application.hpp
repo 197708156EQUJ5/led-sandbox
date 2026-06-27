@@ -20,6 +20,7 @@ public:
     ~Application() = default;
 
     void run();
+    void shutdown();
 
 private:
 

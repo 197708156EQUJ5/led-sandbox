@@ -13,8 +13,7 @@ DisplayIpcServer::DisplayIpcServer(std::string ipcEndpoint) :
     mContext(1), 
     mSocket(mContext, zmq::socket_type::pull)
 {
-    std::cout << "endpoint: " << ipcEndpoint.data() << std::endl;
-     mSocket.bind(ipcEndpoint);
+    mSocket.bind(ipcEndpoint);
 
     const std::string socket_path = ipcEndpoint.substr(std::string("ipc://").size());
 
@@ -22,7 +21,26 @@ DisplayIpcServer::DisplayIpcServer(std::string ipcEndpoint) :
     {
         throw std::runtime_error("Could not set IPC socket permissions.");
     }
-    std::cout << "after endpoint: " << ipcEndpoint.data() << std::endl;
+}
+
+DisplayIpcServer::~DisplayIpcServer()
+{
+    stop();
+}
+
+void DisplayIpcServer::stop()
+{
+    std::cout << "Stopping Display IPC Server" << std::endl;
+    if (!mSocket)
+    {
+        return;
+    }
+
+    std::cout << "Unbind IPC Endpoint Socket" << std::endl;
+    mContext.shutdown();
+    mSocket.unbind(mIpcEndpoint);
+    mSocket.close();
+    std::cout << "Socket closed" << std::endl;
 }
 
 bool DisplayIpcServer::tryReceive(std::string& json_text)

@@ -19,9 +19,9 @@ public:
     LedDisplay(rgb_matrix::RGBMatrix::Options options, const sandbox::config::FontConfig& fontConfig);
     ~LedDisplay();
 
-    void draw(std::vector<sandbox::Scene> scenes);
-    void close();
     bool init();
+    void draw(std::vector<sandbox::Scene> scenes);
+    void shutdown();
 
 private:
 

@@ -56,8 +56,25 @@ bool Application::init()
     return true;
 }
 
+void Application::shutdown()
+{
+    std::cout << "Shutting down LED-Display..." << std::endl;
+    mDisplayIpcServer.reset();
+
+    if (mSceneFolderMonitor)
+    {
+        mSceneFolderMonitor->stop();
+    }
+
+    if (mLedDisplay)
+    {
+        mLedDisplay->shutdown();
+    }
+}
+
 void Application::run()
 {
+    std::cout << "Starting LED-Display..." << std::endl;
     while (mRunning)
     {
         std::string jsonText;
@@ -73,6 +90,9 @@ void Application::run()
 
     // Whatever your normal loop already does.
     }
+    std::cout << "Stopping LED-Display..." << std::endl;
+
+    shutdown();
 }
 
 /*

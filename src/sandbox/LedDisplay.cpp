@@ -49,15 +49,18 @@ bool LedDisplay::init()
 
 LedDisplay::~LedDisplay()
 {
+    std::cout << "D'tor LedDisplay" << std::endl;
     clear();
     present();
     delete mMatrix;
+    std::cout << "D'tor out" << std::endl;
 }
 
-void LedDisplay::close()
+void LedDisplay::shutdown()
 {
     clear();
     present();
+    std::cout << "LedDisplay Shutdown" << std::endl;
 }
 
 void LedDisplay::draw(std::vector<sandbox::Scene> scenes)
