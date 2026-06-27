@@ -12,6 +12,13 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 find_package(CURL REQUIRED)
 find_package(nlohmann_json REQUIRED)
 
+# Ubuntu's cppzmq package provides this fallback FindZeroMQ.cmake module.
+list(APPEND CMAKE_MODULE_PATH
+    "/usr/share/cmake/cppzmq/libzmq-pkg-config"
+)
+find_package(ZeroMQ REQUIRED)
+find_package(cppzmq REQUIRED)
+
 include(FetchContent)
 
 FetchContent_Declare(
@@ -25,10 +32,11 @@ FetchContent_MakeAvailable(tomlplusplus)
 add_executable(sandbox
     src/main.cpp
     src/sandbox/Application.cpp
-    src/sandbox/ApplicationConfig.cpp
     src/sandbox/SceneParser.cpp
     src/sandbox/SceneFolderMonitor.cpp
     src/sandbox/LedDisplay.cpp
+    src/sandbox/comms/DisplayIpcServer.cpp
+    src/sandbox/config/ApplicationConfig.cpp
 )
 
 set(RGB_MATRIX_DIR "/home/ggraves/github/rpi-rgb-led-matrix")
@@ -44,5 +52,6 @@ target_link_libraries(sandbox
         CURL::libcurl
         nlohmann_json::nlohmann_json
         tomlplusplus::tomlplusplus
+        cppzmq
         ${RGB_MATRIX_DIR}/lib/librgbmatrix.a
 )

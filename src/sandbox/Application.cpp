@@ -4,11 +4,14 @@
 #include <string>
 #include <thread>
 
+#include "sandbox/config/ApplicationConfig.hpp"
 #include "sandbox/utils/FontLibrary.hpp"
 
 using sandbox::SceneParser;
-using sandbox::ApplicationConfig;
+using sandbox::comms::DisplayIpcServer;
+using sandbox::config::ApplicationConfig;
 using sandbox::utils::FontLibrary;
+using sandbox::config::ApplicationConfig;
 using rgb_matrix::RGBMatrix;
 
 namespace sandbox
@@ -40,9 +43,31 @@ bool Application::init()
         return false;
     }
 
+    mDisplayIpcServer = std::make_unique<DisplayIpcServer>(mConfig.data.zmqIpc.endpoint);
+
     return true;
 }
 
+void Application::run()
+{
+    while (mRunning)
+    {
+        std::string jsonText;
+
+        if (mDisplayIpcServer->tryReceive(jsonText))
+        {
+             std::cout << "Received JSON:\n" << jsonText << '\n';
+
+        // Later:
+        // const auto scene = sceneParser.parse(jsonText);
+        // ledDisplay.draw(scene);
+        }
+
+    // Whatever your normal loop already does.
+    }
+}
+
+/*
 void Application::run()
 {
     const auto scene = mParser->parse(mWatchedFolder / "sandbox.json");
@@ -66,4 +91,5 @@ void Application::run()
 
     mLedDisplay->close();
 }
+*/
 }

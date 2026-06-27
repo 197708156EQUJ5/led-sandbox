@@ -8,11 +8,12 @@
 
 #include "led-matrix.h"
 
-namespace sandbox
+namespace sandbox::config
 {
 enum class DataIngestionMethod
 {
-    JsonFolderWatcher
+    FOLDER_WATCHER,
+    ZMQ_IPC
 };
 
 struct RgbMatrixConfig
@@ -37,6 +38,11 @@ struct FontConfig
     std::filesystem::path fontPath(std::string_view alias) const;
 };
 
+struct ZmqIpcConfig
+{
+    std::string endpoint;
+};
+
 struct JsonFolderWatcherConfig
 {
     std::filesystem::path folder;
@@ -44,8 +50,9 @@ struct JsonFolderWatcherConfig
 
 struct DataIngestionConfig
 {
-    DataIngestionMethod method{DataIngestionMethod::JsonFolderWatcher};
+    DataIngestionMethod method{DataIngestionMethod::FOLDER_WATCHER};
     JsonFolderWatcherConfig jsonFolderWatcher;
+    ZmqIpcConfig zmqIpc;
 };
 
 struct ApplicationConfig

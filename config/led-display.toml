@@ -18,7 +18,10 @@
   large = "10x20"
 
 [data]
-  ingestion = "json_folder_watcher"
+  ingestion = "zmq_ipc"
+
+[data.zmq_ipc]
+  endpoint = "ipc:///tmp/led-display.sock"
 
 [data.json_folder_watcher]
   folder = "../assets/scenes"

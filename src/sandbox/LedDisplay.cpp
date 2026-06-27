@@ -5,13 +5,15 @@
 #include <iostream>
 
 #include "sandbox/Scene.hpp"
+#include "sandbox/config/ApplicationConfig.hpp"
 
 using namespace rgb_matrix;
+using sandbox::config::FontConfig;
 
 namespace sandbox
 {
 
-LedDisplay::LedDisplay(rgb_matrix::RGBMatrix::Options options, const sandbox::FontConfig& fontConfig) : 
+LedDisplay::LedDisplay(rgb_matrix::RGBMatrix::Options options, const FontConfig& fontConfig) : 
     mOptions(options),
     mFontConfig(fontConfig),
     mFontLibrary(fontConfig.folder)

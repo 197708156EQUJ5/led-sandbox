@@ -1,4 +1,4 @@
-#include "sandbox/ApplicationConfig.hpp"
+#include "sandbox/config/ApplicationConfig.hpp"
 
 #include <limits>
 #include <sstream>
@@ -91,18 +91,22 @@ std::filesystem::path resolvePath(const std::filesystem::path& configDirectory, 
     return path.lexically_normal();
 }
 
-sandbox::DataIngestionMethod parseIngestionMethod(const std::string& ingestionMethod)
+sandbox::config::DataIngestionMethod parseIngestionMethod(const std::string& ingestionMethod)
 {
     if (ingestionMethod == "json_folder_watcher")
     {
-        return sandbox::DataIngestionMethod::JsonFolderWatcher;
+        return sandbox::config::DataIngestionMethod::FOLDER_WATCHER;
+    }
+    else if (ingestionMethod == "zmq_ipc")
+    {
+        return sandbox::config::DataIngestionMethod::ZMQ_IPC;
     }
 
     throw std::runtime_error("Unsupported data.ingestion value: '" + ingestionMethod + "'.");
 }
 }
 
-namespace sandbox
+namespace sandbox::config
 {
 void RgbMatrixConfig::applyTo(rgb_matrix::RGBMatrix::Options& options) const
 {
@@ -198,11 +202,19 @@ ApplicationConfig ApplicationConfig::load(const std::filesystem::path& configPat
 
     switch (config.data.method)
     {
-        case DataIngestionMethod::JsonFolderWatcher:
+        case DataIngestionMethod::FOLDER_WATCHER:
         {
             const toml::table& watcherTable = requireTable(dataTable, "json_folder_watcher");
 
             config.data.jsonFolderWatcher.folder = resolvePath(configDirectory, requireString(watcherTable, "folder"));
+
+            break;
+        }
+        case DataIngestionMethod::ZMQ_IPC:
+        {
+            const toml::table& zmqIpcTable = requireTable(dataTable, "zmq_ipc");
+
+            config.data.zmqIpc.endpoint = requireString(zmqIpcTable, "endpoint");
 
             break;
         }

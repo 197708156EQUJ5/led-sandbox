@@ -9,7 +9,7 @@
 #include "sandbox/Scene.hpp"
 #include "sandbox/SceneParser.hpp"
 #include "sandbox/SceneFolderMonitor.hpp"
-#include "sandbox/ApplicationConfig.hpp"
+#include "sandbox/comms/DisplayIpcServer.hpp"
 
 namespace sandbox
 {
@@ -23,11 +23,12 @@ public:
 
 private:
 
-    sandbox::ApplicationConfig mConfig;
+    sandbox::config::ApplicationConfig mConfig;
     rgb_matrix::RuntimeOptions mRuntimeOptions;
     rgb_matrix::RGBMatrix* mMatrix = nullptr;
     std::filesystem::path mWatchedFolder = "";
 
+    std::unique_ptr<sandbox::comms::DisplayIpcServer> mDisplayIpcServer;
     std::unique_ptr<sandbox::LedDisplay> mLedDisplay = nullptr;
     std::unique_ptr<sandbox::SceneFolderMonitor> mSceneFolderMonitor = nullptr;
     std::unique_ptr<sandbox::SceneParser> mParser = nullptr;
