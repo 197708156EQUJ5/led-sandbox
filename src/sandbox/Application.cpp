@@ -84,9 +84,16 @@ void Application::run()
 
         if (mDisplayIpcServer->tryReceive(jsonText))
         {
-            const Scene scene = mParser->parseJsonText(jsonText);
-            std::vector<Scene> scenes {scene};
-            mLedDisplay->draw(scenes);
+            try 
+            {
+                const Scene scene = mParser->parseJsonText(jsonText);
+                std::vector<Scene> scenes {scene};
+                mLedDisplay->draw(scenes);
+            }
+            catch (const std::exception& error)
+            {
+                std::cerr << "Rejected scene: " << error.what() << '\n';
+            }
         }
     }
     std::cout << "Stopping LED-Display..." << std::endl;
