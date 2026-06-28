@@ -9,6 +9,16 @@
             "radius": 4,
             "color": "#00ff00",
             "fill": true
+        },
+        {
+            "type": "circle",
+            "position": {
+                "x": 26,
+                "y": 10
+            },
+            "radius": 4,
+            "color": "red",
+            "fill": true
         }
     ]
 }

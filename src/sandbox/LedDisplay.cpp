@@ -73,10 +73,19 @@ void LedDisplay::draw(std::vector<sandbox::Scene> scenes)
             int x = object.position.x;
             int y = object.position.y;
             bool is_filled = object.fill.value_or(false);
-            int r = std::stoi(object.color.substr(1, 2), nullptr, 16);
-            int g = std::stoi(object.color.substr(3, 2), nullptr, 16);
-            int b = std::stoi(object.color.substr(5, 2), nullptr, 16);
-            Color color = object.color.substr(0, 1) == "#" ? Color(r, g, b) : Colors::fromString(object.color);
+            bool is_hex = object.color.substr(0, 1) == "#";
+            Color color;
+            if (is_hex)
+            {
+                int r = std::stoi(object.color.substr(1, 2), nullptr, 16);
+                int g = std::stoi(object.color.substr(3, 2), nullptr, 16);
+                int b = std::stoi(object.color.substr(5, 2), nullptr, 16);
+                color = Color(r, g, b);
+            }
+            else
+            {
+                color = Colors::fromString(object.color);
+            }
             switch (object.sceneObjectType)
             {
             case SceneObjectType::CIRCLE:
