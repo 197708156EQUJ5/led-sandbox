@@ -20,7 +20,7 @@ public:
     ~LedDisplay();
 
     bool init();
-    void draw(std::vector<sandbox::Scene> scenes);
+    void draw(std::vector<sandbox::Scene>& scenes);
     void shutdown();
 
 private:

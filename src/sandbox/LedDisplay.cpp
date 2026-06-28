@@ -68,12 +68,12 @@ void LedDisplay::shutdown()
     std::cout << "LedDisplay Shutdown" << std::endl;
 }
 
-void LedDisplay::draw(std::vector<sandbox::Scene> scenes)
+void LedDisplay::draw(std::vector<sandbox::Scene>& scenes)
 {
     clear();
-    for (Scene scene : scenes) 
+    for (Scene& scene : scenes) 
     {
-        for (SceneObject object : scene.sceneObjects)
+        for (SceneObject& object : scene.sceneObjects)
         {
             int x = object.position.x;
             int y = object.position.y;
