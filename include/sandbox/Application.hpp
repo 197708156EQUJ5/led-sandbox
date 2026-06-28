@@ -25,8 +25,6 @@ public:
 private:
 
     sandbox::config::ApplicationConfig mConfig;
-    rgb_matrix::RuntimeOptions mRuntimeOptions;
-    rgb_matrix::RGBMatrix* mMatrix = nullptr;
     std::filesystem::path mWatchedFolder = "";
 
     std::unique_ptr<sandbox::comms::DisplayIpcServer> mDisplayIpcServer;

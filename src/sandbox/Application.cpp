@@ -11,8 +11,6 @@ using sandbox::SceneParser;
 using sandbox::comms::DisplayIpcServer;
 using sandbox::config::ApplicationConfig;
 using sandbox::utils::FontLibrary;
-using sandbox::config::ApplicationConfig;
-using rgb_matrix::RGBMatrix;
 
 namespace sandbox
 {

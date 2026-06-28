@@ -14,6 +14,7 @@ DisplayIpcServer::DisplayIpcServer(std::string ipcEndpoint) :
     mContext(1), 
     mSocket(mContext, zmq::socket_type::pull)
 {
+    mSocket.set(zmq::sockopt::rcvtimeo, 100);
     mSocket.bind(mIpcEndpoint);
 
     const std::string socket_path = mIpcEndpoint.substr(std::string("ipc://").size());
@@ -44,20 +45,19 @@ void DisplayIpcServer::stop()
     std::cout << "Socket closed" << std::endl;
 }
 
-bool DisplayIpcServer::tryReceive(std::string& json_text)
+bool DisplayIpcServer::tryReceive(std::string& jsonText)
 {
     zmq::message_t message;
 
-    const auto received = mSocket.recv(message, zmq::recv_flags::dontwait);
+    const auto received = mSocket.recv(message, zmq::recv_flags::none);
 
     if (!received.has_value())
     {
         return false;
     }
 
-    json_text.assign(static_cast<const char*>(message.data()), message.size());
+    jsonText.assign(static_cast<const char*>(message.data()), message.size());
 
-    std::cout << "Received: " << json_text << '\n';
     return true;
 }
 }
