@@ -10,12 +10,13 @@ namespace sandbox::comms
 {
 
 DisplayIpcServer::DisplayIpcServer(std::string ipcEndpoint) : 
+    mIpcEndpoint(std::move(ipcEndpoint)),
     mContext(1), 
     mSocket(mContext, zmq::socket_type::pull)
 {
-    mSocket.bind(ipcEndpoint);
+    mSocket.bind(mIpcEndpoint);
 
-    const std::string socket_path = ipcEndpoint.substr(std::string("ipc://").size());
+    const std::string socket_path = mIpcEndpoint.substr(std::string("ipc://").size());
 
     if (chmod(socket_path.c_str(), 0666) != 0)
     {
@@ -37,9 +38,9 @@ void DisplayIpcServer::stop()
     }
 
     std::cout << "Unbind IPC Endpoint Socket" << std::endl;
-    mContext.shutdown();
     mSocket.unbind(mIpcEndpoint);
     mSocket.close();
+    mContext.shutdown();
     std::cout << "Socket closed" << std::endl;
 }
 
