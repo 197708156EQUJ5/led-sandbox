@@ -49,7 +49,6 @@ target_include_directories(sandbox
 
 target_link_libraries(sandbox
     PRIVATE
-        CURL::libcurl
         nlohmann_json::nlohmann_json
         tomlplusplus::tomlplusplus
         cppzmq

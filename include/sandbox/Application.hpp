@@ -20,7 +20,6 @@ public:
     ~Application() = default;
 
     void run();
-    void shutdown();
 
 private:
 
@@ -35,5 +34,9 @@ private:
     const std::atomic<bool>& mRunning;
 
     bool init();
+    void shutdown();
+
+    void runIpcIngestion();
+    void runFolderWatcherIngestion();
 };
 }

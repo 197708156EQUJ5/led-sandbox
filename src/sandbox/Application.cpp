@@ -3,6 +3,9 @@
 #include <iostream>
 #include <string>
 #include <thread>
+#include <chrono>
+#include <exception>
+#include <utility>
 
 #include "sandbox/config/ApplicationConfig.hpp"
 #include "sandbox/utils/FontLibrary.hpp"
@@ -65,6 +68,7 @@ void Application::shutdown()
     if (mSceneFolderMonitor)
     {
         mSceneFolderMonitor->stop();
+        mSceneFolderMonitor.reset();
     }
 
     if (mLedDisplay)
@@ -76,52 +80,79 @@ void Application::shutdown()
 void Application::run()
 {
     std::cout << "Starting LED-Display..." << std::endl;
+
     while (mRunning)
     {
-        std::string jsonText;
-
-        if (mDisplayIpcServer->tryReceive(jsonText))
+        switch (mConfig.data.method)
         {
-            try 
-            {
-                const Scene scene = mParser->parseJsonText(jsonText);
-                std::vector<Scene> scenes {scene};
-                mLedDisplay->draw(scenes);
-            }
-            catch (const std::exception& error)
-            {
-                std::cerr << "Rejected scene: " << error.what() << '\n';
-            }
+            case config::DataIngestionMethod::ZMQ_IPC:
+                runIpcIngestion();
+                break;
+
+            case config::DataIngestionMethod::FOLDER_WATCHER:
+                runFolderWatcherIngestion();
+                break;
         }
     }
-    std::cout << "Stopping LED-Display..." << std::endl;
 
+    std::cout << "Stopping LED-Display..." << std::endl;
     shutdown();
 }
 
-/*
-void Application::run()
+void Application::runIpcIngestion()
 {
-    const auto scene = mParser->parse(mWatchedFolder / "sandbox.json");
+    std::string jsonText;
 
-    while (mRunning)
+    if (!mDisplayIpcServer->tryReceive(jsonText))
     {
-        const auto changed_files = mSceneFolderMonitor->consumeChanges();
-        
-        if (changed_files.has_value())
-        {
-            mScenes.clear();
-            for (const auto& file : *changed_files)
-            {
-                mScenes.push_back(mParser->parse(file));
-                // Store/render/register the parsed scene here.
-            }
-        }
-        mLedDisplay->draw(mScenes);
-        std::this_thread::sleep_for(std::chrono::seconds(5));
+        return;
     }
 
-    mLedDisplay->close();
+    try
+    {
+        const Scene scene = mParser->parseJsonText(jsonText);
+        mLedDisplay->draw({scene});
+    }
+    catch (const std::exception& error)
+    {
+        std::cerr << "Rejected IPC scene: " << error.what() << '\n';
+    }
 }
-*/
+
+void Application::runFolderWatcherIngestion()
+{
+    const auto changedFiles = mSceneFolderMonitor->consumeChanges();
+
+    if (changedFiles.has_value())
+    {
+        std::vector<Scene> updatedScenes;
+        updatedScenes.reserve(changedFiles->size());
+
+        for (const auto& file : *changedFiles)
+        {
+            if (file.extension() != ".json")
+            {
+                continue;
+            }
+
+            try
+            {
+                updatedScenes.push_back(mParser->parseFile(file));
+            }
+            catch (const std::exception& error)
+            {
+                std::cerr << "Could not load scene file '"
+                      << file.string()
+                      << "': "
+                      << error.what()
+                      << '\n';
+            }
+        }
+
+        mScenes = std::move(updatedScenes);
+        mLedDisplay->draw(mScenes);
+    }
+
+    std::this_thread::sleep_for(std::chrono::milliseconds(100));
+}
 }
