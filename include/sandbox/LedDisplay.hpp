@@ -24,7 +24,7 @@ public:
     void shutdown();
 
 private:
-
+    Color parseColor(const std::string& colorText) const;
     void filledCircle(int center_x, int center_y, int radius, const Color &color);
     void fillBox(int left, int top, int right, int bottom, const Color& color);
     void drawBox(int left, int top, int right, int bottom, const Color& color);
