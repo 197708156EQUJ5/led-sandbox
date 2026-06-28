@@ -20,7 +20,10 @@ Application::Application(const std::atomic<bool>& running) :
     mRunning(running),
     mParser(std::make_unique<SceneParser>())
 {
-    init();
+    if (!init())
+    {
+        throw std::runtime_error("Failed to initialize application.");
+    }
 }
 
 bool Application::init()

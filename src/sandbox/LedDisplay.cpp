@@ -49,11 +49,17 @@ bool LedDisplay::init()
 
 LedDisplay::~LedDisplay()
 {
-    std::cout << "D'tor LedDisplay" << std::endl;
-    clear();
-    present();
+    if (mCanvas != nullptr)
+    {
+        clear();
+    }
+
+    if (mMatrix != nullptr && mCanvas != nullptr)
+    {
+        present();
+    }
+
     delete mMatrix;
-    std::cout << "D'tor out" << std::endl;
 }
 
 void LedDisplay::shutdown()
