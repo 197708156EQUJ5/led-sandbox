@@ -15,7 +15,6 @@ namespace sandbox
 
 LedDisplay::LedDisplay(rgb_matrix::RGBMatrix::Options options, const FontConfig& fontConfig) : 
     mOptions(options),
-    mFontConfig(fontConfig),
     mFontLibrary(fontConfig.folder)
 {
     for (const auto& [alias, fontName] : fontConfig.aliases)

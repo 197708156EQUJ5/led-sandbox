@@ -32,7 +32,6 @@ private:
     void present();
 
     rgb_matrix::RGBMatrix::Options mOptions;
-    const sandbox::config::FontConfig mFontConfig;
     rgb_matrix::RGBMatrix* mMatrix = nullptr;
     rgb_matrix::FrameCanvas* mCanvas = nullptr;
     utils::FontLibrary mFontLibrary;
