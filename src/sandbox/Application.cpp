@@ -81,14 +81,10 @@ void Application::run()
 
         if (mDisplayIpcServer->tryReceive(jsonText))
         {
-             std::cout << "Received JSON:\n" << jsonText << '\n';
-
-        // Later:
-        // const auto scene = sceneParser.parse(jsonText);
-        // ledDisplay.draw(scene);
+            const Scene scene = mParser->parseJsonText(jsonText);
+            std::vector<Scene> scenes {scene};
+            mLedDisplay->draw(scenes);
         }
-
-    // Whatever your normal loop already does.
     }
     std::cout << "Stopping LED-Display..." << std::endl;
 

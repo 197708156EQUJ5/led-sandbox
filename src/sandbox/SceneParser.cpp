@@ -15,7 +15,8 @@ using sandbox::SceneObjectType;
 
 namespace sandbox
 {
-Scene SceneParser::parse(const std::filesystem::path& file) const
+
+Scene SceneParser::parseFile(const std::filesystem::path& file) const
 {
     std::ifstream input(file);
 
@@ -32,9 +33,34 @@ Scene SceneParser::parse(const std::filesystem::path& file) const
     }
     catch (const json::parse_error& error)
     {
-        throw std::runtime_error("Invalid JSON in scene file '" + file.string() + "': " + error.what());
+        throw std::runtime_error(
+            "Invalid JSON in scene file '" + file.string() + "': " + error.what()
+        );
     }
 
+    return parseJson(root);
+}
+
+Scene SceneParser::parseJsonText(std::string_view jsonText) const
+{
+    json root;
+
+    try
+    {
+        root = json::parse(jsonText);
+    }
+    catch (const json::parse_error& error)
+    {
+        throw std::runtime_error(
+            "Invalid scene JSON received over IPC: " + std::string(error.what())
+        );
+    }
+
+    return parseJson(root);
+}
+
+Scene SceneParser::parseJson(const json& root) const
+{
     if (!root.contains("objects") || !root["objects"].is_array())
     {
         throw std::runtime_error("Scene JSON must contain an 'objects' array.");

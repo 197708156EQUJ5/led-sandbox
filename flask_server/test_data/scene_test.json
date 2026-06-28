@@ -1,0 +1,14 @@
+{
+    "objects": [
+        {
+            "type": "circle",
+            "position": {
+                "x": 16,
+                "y": 5
+            },
+            "radius": 4,
+            "color": "#00ff00",
+            "fill": true
+        }
+    ]
+}
