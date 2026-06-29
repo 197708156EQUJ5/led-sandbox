@@ -1,0 +1,12 @@
+{
+    "files.watcherExclude": {
+        "**/build/**": true,
+        "**/.git/**": true,
+        "**/rpi-rgb-led-matrix/**": true
+    },
+    "search.exclude": {
+        "**/build/**": true,
+        "**/rpi-rgb-led-matrix/**": true
+    },
+    "C_Cpp.intelliSenseEngine": "disabled"
+}

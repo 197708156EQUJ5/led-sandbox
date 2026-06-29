@@ -5,15 +5,16 @@
 #include <iostream>
 
 #include "sandbox/Scene.hpp"
+#include "sandbox/config/ApplicationConfig.hpp"
 
 using namespace rgb_matrix;
+using sandbox::config::FontConfig;
 
 namespace sandbox
 {
 
-LedDisplay::LedDisplay(rgb_matrix::RGBMatrix::Options options, const sandbox::FontConfig& fontConfig) : 
+LedDisplay::LedDisplay(rgb_matrix::RGBMatrix::Options options, const FontConfig& fontConfig) : 
     mOptions(options),
-    mFontConfig(fontConfig),
     mFontLibrary(fontConfig.folder)
 {
     for (const auto& [alias, fontName] : fontConfig.aliases)
@@ -47,31 +48,38 @@ bool LedDisplay::init()
 
 LedDisplay::~LedDisplay()
 {
-    clear();
-    present();
+    if (mCanvas != nullptr)
+    {
+        clear();
+    }
+
+    if (mMatrix != nullptr && mCanvas != nullptr)
+    {
+        present();
+    }
+
     delete mMatrix;
 }
 
-void LedDisplay::close()
+void LedDisplay::shutdown()
 {
     clear();
     present();
+    std::cout << "LedDisplay Shutdown" << std::endl;
 }
 
-void LedDisplay::draw(std::vector<sandbox::Scene> scenes)
+void LedDisplay::draw(const std::vector<sandbox::Scene>& scenes)
 {
     clear();
-    for (Scene scene : scenes) 
+    for (const Scene& scene : scenes) 
     {
-        for (SceneObject object : scene.sceneObjects)
+        for (const SceneObject& object : scene.sceneObjects)
         {
             int x = object.position.x;
             int y = object.position.y;
             bool is_filled = object.fill.value_or(false);
-            int r = std::stoi(object.color.substr(1, 2), nullptr, 16);
-            int g = std::stoi(object.color.substr(3, 2), nullptr, 16);
-            int b = std::stoi(object.color.substr(5, 2), nullptr, 16);
-            Color color = object.color.substr(0, 1) == "#" ? Color(r, g, b) : Colors::fromString(object.color);
+            Color color = parseColor(object.color);
+
             switch (object.sceneObjectType)
             {
             case SceneObjectType::CIRCLE:
@@ -111,6 +119,23 @@ void LedDisplay::draw(std::vector<sandbox::Scene> scenes)
         }
     }
     present();
+}
+
+Color LedDisplay::parseColor(const std::string& colorText) const
+{
+    if (colorText.empty())
+    {
+        return Color(255, 255, 255);
+    }
+    if (colorText.front() == '#')
+    {
+        int r = std::stoi(colorText.substr(1, 2), nullptr, 16);
+        int g = std::stoi(colorText.substr(3, 2), nullptr, 16);
+        int b = std::stoi(colorText.substr(5, 2), nullptr, 16);
+        return Color(r, g, b);
+    }
+
+    return Colors::fromString(colorText);
 }
 
 void LedDisplay::filledCircle(int center_x, int center_y, int radius, const Color &color)

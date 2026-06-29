@@ -7,24 +7,24 @@
 #include "graphics.h"
 
 #include "sandbox/Scene.hpp"
+#include "sandbox/config/ApplicationConfig.hpp"
 #include "sandbox/utils/Constants.hpp"
 #include "sandbox/utils/FontLibrary.hpp"
-#include "sandbox/ApplicationConfig.hpp"
 
 namespace sandbox
 {
 class LedDisplay
 {
 public:
-    LedDisplay(rgb_matrix::RGBMatrix::Options options, const sandbox::FontConfig& fontConfig);
+    LedDisplay(rgb_matrix::RGBMatrix::Options options, const sandbox::config::FontConfig& fontConfig);
     ~LedDisplay();
 
-    void draw(std::vector<sandbox::Scene> scenes);
-    void close();
     bool init();
+    void draw(const std::vector<sandbox::Scene>& scenes);
+    void shutdown();
 
 private:
-
+    Color parseColor(const std::string& colorText) const;
     void filledCircle(int center_x, int center_y, int radius, const Color &color);
     void fillBox(int left, int top, int right, int bottom, const Color& color);
     void drawBox(int left, int top, int right, int bottom, const Color& color);
@@ -32,7 +32,6 @@ private:
     void present();
 
     rgb_matrix::RGBMatrix::Options mOptions;
-    const sandbox::FontConfig mFontConfig;
     rgb_matrix::RGBMatrix* mMatrix = nullptr;
     rgb_matrix::FrameCanvas* mCanvas = nullptr;
     utils::FontLibrary mFontLibrary;
