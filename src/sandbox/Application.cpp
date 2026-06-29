@@ -18,7 +18,7 @@ using sandbox::utils::FontLibrary;
 namespace sandbox
 {
 Application::Application(const std::atomic<bool>& running) : 
-    mRunning(running),
+    mIsRunning(running),
     mParser(std::make_unique<SceneParser>())
 {
     if (!init())
@@ -46,6 +46,12 @@ bool Application::init()
     
             mSceneFolderMonitor = std::make_unique<SceneFolderMonitor>(mWatchedFolder);
             mSceneFolderMonitor->start();
+            break;
+            
+        case config::DataIngestionMethod::REST_API:
+            mPort = mConfig.data.restApi.port;
+            mRestApiServer = std::make_unique<comms::RestApiServer>(mPort);
+            mRestApiServer->start();
             break;
     }
     
@@ -75,13 +81,18 @@ void Application::shutdown()
     {
         mLedDisplay->shutdown();
     }
+
+    if (mRestApiServer)
+    {
+        mRestApiServer->stop();
+    }
 }
 
 void Application::run()
 {
     std::cout << "Starting LED-Display..." << std::endl;
 
-    while (mRunning)
+    while (mIsRunning)
     {
         switch (mConfig.data.method)
         {
@@ -92,6 +103,10 @@ void Application::run()
             case config::DataIngestionMethod::FOLDER_WATCHER:
                 runFolderWatcherIngestion();
                 break;
+
+            case config::DataIngestionMethod::REST_API:
+                runRestApiIngestion();
+                break;
         }
     }
 
@@ -101,16 +116,16 @@ void Application::run()
 
 void Application::runIpcIngestion()
 {
-    std::string jsonText;
+    std::string json_text;
 
-    if (!mDisplayIpcServer->tryReceive(jsonText))
+    if (!mDisplayIpcServer->tryReceive(json_text))
     {
         return;
     }
 
     try
     {
-        const Scene scene = mParser->parseJsonText(jsonText);
+        const Scene scene = mParser->parseJsonText(json_text);
         mLedDisplay->draw({scene});
     }
     catch (const std::exception& error)
@@ -121,14 +136,14 @@ void Application::runIpcIngestion()
 
 void Application::runFolderWatcherIngestion()
 {
-    const auto changedFiles = mSceneFolderMonitor->consumeChanges();
+    const auto changed_files = mSceneFolderMonitor->consumeChanges();
 
-    if (changedFiles.has_value())
+    if (changed_files.has_value())
     {
-        std::vector<Scene> updatedScenes;
-        updatedScenes.reserve(changedFiles->size());
+        std::vector<Scene> updated_scenes;
+        updated_scenes.reserve(changed_files->size());
 
-        for (const auto& file : *changedFiles)
+        for (const auto& file : *changed_files)
         {
             if (file.extension() != ".json")
             {
@@ -137,22 +152,40 @@ void Application::runFolderWatcherIngestion()
 
             try
             {
-                updatedScenes.push_back(mParser->parseFile(file));
+                updated_scenes.push_back(mParser->parseFile(file));
             }
             catch (const std::exception& error)
             {
-                std::cerr << "Could not load scene file '"
-                      << file.string()
-                      << "': "
-                      << error.what()
-                      << '\n';
+                std::cerr << "Could not load scene file '" << file.string() << "': " << error.what() << '\n';
             }
         }
 
-        mScenes = std::move(updatedScenes);
+        mScenes = std::move(updated_scenes);
         mLedDisplay->draw(mScenes);
     }
 
     std::this_thread::sleep_for(std::chrono::milliseconds(100));
+}
+
+void Application::runRestApiIngestion()
+{
+    std::string json_text;
+
+    if (!mRestApiServer->tryReceive(json_text))
+    {
+        return;
+    }
+
+    try
+    {
+        const Scene scene = mParser->parseJsonText(json_text);
+        mLedDisplay->draw({scene});
+    }
+    catch (const std::exception& error)
+    {
+        std::cerr << "Rejected REST Api scene: " << error.what() << '\n';
+    }
+
+    std::this_thread::sleep_for(std::chrono::milliseconds(10));    
 }
 }

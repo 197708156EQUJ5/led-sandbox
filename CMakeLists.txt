@@ -29,6 +29,17 @@ FetchContent_Declare(
 
 FetchContent_MakeAvailable(tomlplusplus)
 
+FetchContent_Declare(
+    Crow
+    GIT_REPOSITORY https://github.com/CrowCpp/Crow.git
+    GIT_TAG v1.2.1.2
+)
+
+set(CROW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
+set(CROW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
+
+FetchContent_MakeAvailable(Crow)
+
 add_executable(sandbox
     src/main.cpp
     src/sandbox/Application.cpp
@@ -36,6 +47,7 @@ add_executable(sandbox
     src/sandbox/SceneFolderMonitor.cpp
     src/sandbox/LedDisplay.cpp
     src/sandbox/comms/DisplayIpcServer.cpp
+    src/sandbox/comms/RestApiServer.cpp
     src/sandbox/config/ApplicationConfig.cpp
 )
 
@@ -52,5 +64,6 @@ target_link_libraries(sandbox
         nlohmann_json::nlohmann_json
         tomlplusplus::tomlplusplus
         cppzmq
+        Crow::Crow
         ${RGB_MATRIX_DIR}/lib/librgbmatrix.a
 )

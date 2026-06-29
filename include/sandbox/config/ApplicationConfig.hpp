@@ -13,7 +13,8 @@ namespace sandbox::config
 enum class DataIngestionMethod
 {
     FOLDER_WATCHER,
-    ZMQ_IPC
+    ZMQ_IPC,
+    REST_API
 };
 
 struct RgbMatrixConfig
@@ -38,6 +39,11 @@ struct FontConfig
     std::filesystem::path fontPath(std::string_view alias) const;
 };
 
+struct RestApiConfig
+{
+    uint16_t port;
+};
+
 struct ZmqIpcConfig
 {
     std::string endpoint;
@@ -53,6 +59,7 @@ struct DataIngestionConfig
     DataIngestionMethod method{DataIngestionMethod::FOLDER_WATCHER};
     JsonFolderWatcherConfig jsonFolderWatcher;
     ZmqIpcConfig zmqIpc;
+    RestApiConfig restApi;
 };
 
 struct ApplicationConfig

@@ -101,6 +101,10 @@ sandbox::config::DataIngestionMethod parseIngestionMethod(const std::string& ing
     {
         return sandbox::config::DataIngestionMethod::ZMQ_IPC;
     }
+    else if (ingestionMethod == "rest_api")
+    {
+        return sandbox::config::DataIngestionMethod::REST_API;
+    }
 
     throw std::runtime_error("Unsupported data.ingestion value: '" + ingestionMethod + "'.");
 }
@@ -216,6 +220,19 @@ ApplicationConfig ApplicationConfig::load(const std::filesystem::path& configPat
 
             config.data.zmqIpc.endpoint = requireString(zmqIpcTable, "endpoint");
 
+            break;
+        }
+        case DataIngestionMethod::REST_API:
+        {
+            const toml::table& restApiTable = requireTable(dataTable, "rest_api");
+
+            config.data.restApi.port = requirePositiveInt(restApiTable, "port");
+
+            break;
+        }
+        default:
+        {
+            throw std::runtime_error("Unsupported data.ingestion value: '" + ingestionName + "'.");
             break;
         }
     }
