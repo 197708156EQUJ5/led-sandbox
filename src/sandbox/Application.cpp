@@ -52,6 +52,9 @@ bool Application::init()
             mPort = mConfig.data.restApi.port;
             mRestApiServer = std::make_unique<comms::RestApiServer>(mPort);
             mRestApiServer->start();
+            mWebSceneServer = std::make_unique<sandbox::web::WebSceneServer>(mPort,
+                std::filesystem::current_path() / "web", mSceneMailbox);
+            mWebSceneServer->start();
             break;
     }
     

@@ -13,6 +13,8 @@
 #include "sandbox/SceneFolderMonitor.hpp"
 #include "sandbox/comms/DisplayIpcServer.hpp"
 #include "sandbox/comms/RestApiServer.hpp"
+#include "sandbox/web/SceneMailbox.hpp"
+#include "sandbox/web/WebSceneServer.hpp"
 
 namespace sandbox
 {
@@ -37,6 +39,8 @@ private:
     std::unique_ptr<comms::RestApiServer> mRestApiServer = nullptr;
     std::unique_ptr<sandbox::SceneParser> mParser = nullptr;
     std::vector<sandbox::Scene> mScenes {};
+    sandbox::web::SceneMailbox mSceneMailbox;
+    std::unique_ptr<sandbox::web::WebSceneServer> mWebSceneServer = nullptr;
     const std::atomic<bool>& mIsRunning;
 
     bool init();
