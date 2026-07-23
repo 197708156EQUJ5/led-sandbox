@@ -28,3 +28,6 @@
 
 [data.rest_api]
   port = 8080
+
+[data.web_server]
+  port = 8080

@@ -52,6 +52,10 @@ bool Application::init()
             mPort = mConfig.data.restApi.port;
             mRestApiServer = std::make_unique<comms::RestApiServer>(mPort);
             mRestApiServer->start();
+            break;
+
+        case config::DataIngestionMethod::WEB_SERVER:
+            mPort = mConfig.data.webServer.port;
             mWebSceneServer = std::make_unique<sandbox::web::WebSceneServer>(mPort,
                 std::filesystem::current_path() / "web", mSceneMailbox);
             mWebSceneServer->start();
@@ -88,6 +92,11 @@ void Application::shutdown()
     if (mRestApiServer)
     {
         mRestApiServer->stop();
+    }
+
+    if (mWebSceneServer)
+    {
+        mWebSceneServer->stop();
     }
 }
 
