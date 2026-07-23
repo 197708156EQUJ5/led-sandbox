@@ -11,6 +11,7 @@ enum class SceneObjectType
 {
     CIRCLE,
     RECTANGLE,
+    TRIANGLE,
     TEXT
 };
 
@@ -34,6 +35,7 @@ struct SceneObject
 
     std::optional<std::string> text;
     std::optional<std::string> fontSize;
+    std::optional<std::string> direction;
 };
 
 struct Scene
