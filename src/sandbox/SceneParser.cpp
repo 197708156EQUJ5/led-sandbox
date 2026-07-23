@@ -47,6 +47,7 @@ Scene SceneParser::parseJsonText(std::string_view jsonText) const
 
     try
     {
+        std::cout << "JSON Text" << std::endl << jsonText << std::endl;
         root = json::parse(jsonText);
     }
     catch (const json::parse_error& error)
