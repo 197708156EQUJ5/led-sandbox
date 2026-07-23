@@ -14,7 +14,8 @@ enum class DataIngestionMethod
 {
     FOLDER_WATCHER,
     ZMQ_IPC,
-    REST_API
+    REST_API,
+    WEB_SERVER
 };
 
 struct RgbMatrixConfig
@@ -39,6 +40,11 @@ struct FontConfig
     std::filesystem::path fontPath(std::string_view alias) const;
 };
 
+struct WebServerConfig
+{
+    uint16_t port;
+};
+
 struct RestApiConfig
 {
     uint16_t port;
@@ -60,6 +66,7 @@ struct DataIngestionConfig
     JsonFolderWatcherConfig jsonFolderWatcher;
     ZmqIpcConfig zmqIpc;
     RestApiConfig restApi;
+    WebServerConfig webServer;
 };
 
 struct ApplicationConfig

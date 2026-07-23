@@ -49,6 +49,7 @@ add_executable(sandbox
     src/sandbox/comms/DisplayIpcServer.cpp
     src/sandbox/comms/RestApiServer.cpp
     src/sandbox/config/ApplicationConfig.cpp
+    src/sandbox/web/WebSceneServer.cpp
 )
 
 set(RGB_MATRIX_DIR "/home/ggraves/github/rpi-rgb-led-matrix")
@@ -66,4 +67,12 @@ target_link_libraries(sandbox
         cppzmq
         Crow::Crow
         ${RGB_MATRIX_DIR}/lib/librgbmatrix.a
+)
+
+add_custom_command(
+    TARGET sandbox
+    POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+        ${CMAKE_SOURCE_DIR}/web
+        $<TARGET_FILE_DIR:sandbox>/web
 )

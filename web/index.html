@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>LED Display Scene Editor</title>
+    <link rel="stylesheet" href="/styles.css">
+    <script src="/app.js" defer></script>
+</head>
+<body>
+    <header class="page-header">
+        <div>
+            <h1>LED Display Scene Editor</h1>
+            <p>Build a scene, then send the complete shape list to the display.</p>
+        </div>
+        <div class="matrix-size">
+            <label>
+                Width
+                <input id="matrixWidth" type="number" min="1" value="128">
+            </label>
+            <label>
+                Height
+                <input id="matrixHeight" type="number" min="1" value="64">
+            </label>
+        </div>
+    </header>
+
+    <main class="editor-grid">
+        <section class="shape-card" aria-labelledby="circleHeading">
+            <h2 id="circleHeading">Circle</h2>
+            <form id="circleForm">
+                <div class="field-grid">
+                    <label>X <input name="x" type="number" min="0" value="32" required></label>
+                    <label>Y <input name="y" type="number" min="0" value="32" required></label>
+                    <label>Radius <input name="radius" type="number" min="1" value="10" required></label>
+                    <label>Color <input name="color" type="color" value="#ffffff"></label>
+                    <label>Thickness <input name="thickness" type="number" min="1" value="1" required></label>
+                    <label class="check-label"><input name="filled" type="checkbox"> Filled</label>
+                </div>
+                <button type="submit">Add Circle</button>
+            </form>
+            <ol id="circleList" class="shape-list"></ol>
+        </section>
+
+        <section class="shape-card" aria-labelledby="rectangleHeading">
+            <h2 id="rectangleHeading">Rectangle</h2>
+            <form id="rectangleForm">
+                <div class="field-grid">
+                    <label>X <input name="x" type="number" min="0" value="4" required></label>
+                    <label>Y <input name="y" type="number" min="0" value="4" required></label>
+                    <label>Width <input name="width" type="number" min="1" value="40" required></label>
+                    <label>Height <input name="height" type="number" min="1" value="20" required></label>
+                    <label>Color <input name="color" type="color" value="#00ff00"></label>
+                    <label>Thickness <input name="thickness" type="number" min="1" value="1" required></label>
+                    <label class="check-label"><input name="filled" type="checkbox"> Filled</label>
+                </div>
+                <button type="submit">Add Rectangle</button>
+            </form>
+            <ol id="rectangleList" class="shape-list"></ol>
+        </section>
+
+        <section class="shape-card" aria-labelledby="lineHeading">
+            <h2 id="lineHeading">Line</h2>
+            <form id="lineForm">
+                <div class="field-grid">
+                    <label>X1 <input name="x1" type="number" min="0" value="0" required></label>
+                    <label>Y1 <input name="y1" type="number" min="0" value="0" required></label>
+                    <label>X2 <input name="x2" type="number" min="0" value="127" required></label>
+                    <label>Y2 <input name="y2" type="number" min="0" value="63" required></label>
+                    <label>Color <input name="color" type="color" value="#ff0000"></label>
+                    <label>Thickness <input name="thickness" type="number" min="1" value="1" required></label>
+                </div>
+                <button type="submit">Add Line</button>
+            </form>
+            <ol id="lineList" class="shape-list"></ol>
+        </section>
+
+        <section class="shape-card" aria-labelledby="textHeading">
+            <h2 id="textHeading">Text</h2>
+            <form id="textForm">
+                <div class="field-grid">
+                    <label class="field-wide">Text <input name="text" type="text" maxlength="128" value="HELLO" required></label>
+                    <label>X <input name="x" type="number" min="0" value="5" required></label>
+                    <label>Y <input name="y" type="number" min="0" value="30" required></label>
+                    <label>Color <input name="color" type="color" value="#ffffff"></label>
+                    <label>Font <input name="font" type="text" value="6x10" required></label>
+                    <label>Font Size <input name="fontSize" type="number" min="1" value="1" required></label>
+                </div>
+                <button type="submit">Add Text</button>
+            </form>
+            <ol id="textList" class="shape-list"></ol>
+        </section>
+    </main>
+
+    <section class="scene-card">
+        <div class="scene-header">
+            <div>
+                <h2>Scene</h2>
+                <p id="sceneSummary">0 shapes</p>
+            </div>
+            <div class="scene-actions">
+                <button id="clearSceneButton" class="secondary-button" type="button">Clear Scene</button>
+                <button id="sendSceneButton" type="button">Send to LED Display</button>
+            </div>
+        </div>
+        <pre id="scenePreview" aria-live="polite">{ "shapes": [] }</pre>
+        <p id="statusMessage" class="status-message" aria-live="polite"></p>
+    </section>
+</body>
+</html>

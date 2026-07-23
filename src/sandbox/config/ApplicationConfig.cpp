@@ -105,6 +105,10 @@ sandbox::config::DataIngestionMethod parseIngestionMethod(const std::string& ing
     {
         return sandbox::config::DataIngestionMethod::REST_API;
     }
+    else if (ingestionMethod == "web_server")
+    {
+        return sandbox::config::DataIngestionMethod::WEB_SERVER;
+    }
 
     throw std::runtime_error("Unsupported data.ingestion value: '" + ingestionMethod + "'.");
 }
@@ -227,6 +231,14 @@ ApplicationConfig ApplicationConfig::load(const std::filesystem::path& configPat
             const toml::table& restApiTable = requireTable(dataTable, "rest_api");
 
             config.data.restApi.port = requirePositiveInt(restApiTable, "port");
+
+            break;
+        }
+        case DataIngestionMethod::WEB_SERVER:
+        {
+            const toml::table& restApiTable = requireTable(dataTable, "web_server");
+
+            config.data.webServer.port = requirePositiveInt(restApiTable, "port");
 
             break;
         }
