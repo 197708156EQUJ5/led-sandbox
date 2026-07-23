@@ -15,9 +15,11 @@
             "fontSize": "tiny"
         },
         {
-            "type": "text",
+            "type": "triangle",
             "position": {"x": 9, "y": 13},
-            "text": "\u25B7",
+            "width": 10,
+            "height": 10,
+            "direction": "east",
             "color": "#666666",
             "fontSize": "tiny"
         },
