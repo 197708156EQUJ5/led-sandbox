@@ -13,6 +13,15 @@
 
 namespace sandbox
 {
+
+enum class TriangleDirection
+{
+    North,
+    South,
+    East,
+    West
+};
+
 class LedDisplay
 {
 public:
@@ -28,6 +37,7 @@ private:
     void filledCircle(int center_x, int center_y, int radius, const Color &color);
     void fillBox(int left, int top, int right, int bottom, const Color& color);
     void drawBox(int left, int top, int right, int bottom, const Color& color);
+    void drawTriangle(int left, int top, int width, int height, TriangleDirection direction, const Color& color);
     void clear();
     void present();
 

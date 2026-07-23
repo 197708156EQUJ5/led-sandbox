@@ -107,25 +107,33 @@ void LedDisplay::draw(const std::vector<sandbox::Scene>& scenes)
                 }
                 break;
             }
+            case SceneObjectType::TRIANGLE:
+            {
+                const std::string direction = object.text.value_or("");
+                TriangleDirection direction = Direction::NORTH;
+                if (direction == "north")
+                {
+                    direction = TriangleDirection::NORTH;
+                }
+                else if (direction == "south")
+                {
+                    direction = TriangleDirection::SOUTH;
+                }
+                else if (direction == "east")
+                {
+                    direction = TriangleDirection::EAST;
+                }
+                else if (direction == "west")
+                {
+                    direction = TriangleDirection::WEST;
+                }
+                drawTriangle(x, y, x + object.width.value_or(0), y + object.height.value_or(0), direction, color);
+                break;
+            }
             case SceneObjectType::TEXT:            
             {
                 const Font& font = *mFontMap.at(object.fontSize.value_or("small"));
                 const std::string text = object.text.value_or("");
-
-                std::cout << "Text: [" << text << "]\nBytes:";
-
-                for (const unsigned char byte : text)
-                {
-                    std::cout << ' '
-                              << std::hex
-                              << std::uppercase
-                              << std::setw(2)
-                              << std::setfill('0')
-                              << static_cast<int>(byte);
-                }
-
-                std::cout << std::dec << '\n';
-
                 DrawText(mCanvas, font, x, y, color, nullptr, text.c_str());
                 break;
             }            
@@ -183,6 +191,54 @@ void LedDisplay::drawBox(int left, int top, int right, int bottom, const Color& 
 
     DrawLine(mCanvas, left, top, left, bottom, color);
     DrawLine(mCanvas, right, top, right, bottom, color);
+}
+
+void LedDisplay::drawTriangle(int left, int top, int width, int height, TriangleDirection direction, const Color& color)
+{
+    if (width < 2 || height < 2)
+    {
+        return;
+    }
+
+    const int right = left + width - 1;
+    const int bottom = top + height - 1;
+    const int center_x = left + ((width - 1) / 2);
+    const int center_y = top + ((height - 1) / 2);
+
+    switch (direction)
+    {
+        case TriangleDirection::North:
+        {
+            DrawLine(mCanvas, center_x, top, left, bottom, color);
+            DrawLine(mCanvas, center_x, top, right, bottom, color);
+            DrawLine(mCanvas, left, bottom, right, bottom, color);
+            break;
+        }
+
+        case TriangleDirection::South:
+        {
+            DrawLine(mCanvas, left, top, right, top, color);
+            DrawLine(mCanvas, left, top, center_x, bottom, color);
+            DrawLine(mCanvas, right, top, center_x, bottom, color);
+            break;
+        }
+
+        case TriangleDirection::East:
+        {
+            DrawLine(mCanvas, left, top, right, center_y, color);
+            DrawLine(mCanvas, right, center_y, left, bottom, color);
+            DrawLine(mCanvas, left, top, left, bottom, color);
+            break;
+        }
+
+        case TriangleDirection::West:
+        {
+            DrawLine(mCanvas, right, top, left, center_y, color);
+            DrawLine(mCanvas, left, center_y, right, bottom, color);
+            DrawLine(mCanvas, right, top, right, bottom, color);
+            break;
+        }
+    }
 }
 
 void LedDisplay::clear()

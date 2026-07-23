@@ -10,22 +10,43 @@
         {
             "type": "text",
             "position": {"x": 0, "y": 13},
-            "text": " 1 \u25B7 0 VET",
+            "text": " 1  0 VET",
             "color": "#cccccc",
+            "fontSize": "tiny"
+        },
+        {
+            "type": "text",
+            "position": {"x": 9, "y": 13},
+            "text": "\u25B7",
+            "color": "#666666",
             "fontSize": "tiny"
         },
         {
             "type": "text",
             "position": {"x": 0, "y": 19},
-            "text": " 2 \u25B3 1 HAM +1.345",
+            "text": " 2  1 HAM 1.345",
             "color": "#cccccc",
             "fontSize": "tiny"
         },
         {
             "type": "text",
+            "position": {"x": 9, "y": 19},
+            "text": "\u25B3",
+            "color": "#00ff00",
+            "fontSize": "tiny"
+        },
+        {
+            "type": "text",
             "position": {"x": 0, "y": 25},
-            "text": " 3 \u25BD 1 SCH +2.345",
+            "text": " 3  1 SCH 2.345",
             "color": "#cccccc",
+            "fontSize": "tiny"
+        },
+        {
+            "type": "text",
+            "position": {"x": 9, "y": 25},
+            "text": "\u25BD",
+            "color": "#ffff00",
             "fontSize": "tiny"
         }
 
