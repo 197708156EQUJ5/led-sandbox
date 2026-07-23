@@ -207,7 +207,7 @@ void LedDisplay::drawTriangle(int left, int top, int width, int height, Triangle
 
     switch (direction)
     {
-        case TriangleDirection::North:
+        case TriangleDirection::NORTH:
         {
             DrawLine(mCanvas, center_x, top, left, bottom, color);
             DrawLine(mCanvas, center_x, top, right, bottom, color);
@@ -215,7 +215,7 @@ void LedDisplay::drawTriangle(int left, int top, int width, int height, Triangle
             break;
         }
 
-        case TriangleDirection::South:
+        case TriangleDirection::SOUTH:
         {
             DrawLine(mCanvas, left, top, right, top, color);
             DrawLine(mCanvas, left, top, center_x, bottom, color);
@@ -223,7 +223,7 @@ void LedDisplay::drawTriangle(int left, int top, int width, int height, Triangle
             break;
         }
 
-        case TriangleDirection::East:
+        case TriangleDirection::EAST:
         {
             DrawLine(mCanvas, left, top, right, center_y, color);
             DrawLine(mCanvas, right, center_y, left, bottom, color);
@@ -231,7 +231,7 @@ void LedDisplay::drawTriangle(int left, int top, int width, int height, Triangle
             break;
         }
 
-        case TriangleDirection::West:
+        case TriangleDirection::WEST:
         {
             DrawLine(mCanvas, right, top, left, center_y, color);
             DrawLine(mCanvas, left, center_y, right, bottom, color);
