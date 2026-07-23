@@ -110,7 +110,7 @@ void LedDisplay::draw(const std::vector<sandbox::Scene>& scenes)
             case SceneObjectType::TRIANGLE:
             {
                 const std::string directionJson = object.text.value_or("");
-                TriangleDirection direction = Direction::NORTH;
+                TriangleDirection direction = TriangleDirection::NORTH;
                 if (directionJson == "north")
                 {
                     direction = TriangleDirection::NORTH;
