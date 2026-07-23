@@ -84,6 +84,11 @@ SceneObjectType SceneParser::parseObjectType(const std::string& type) const
         return SceneObjectType::CIRCLE;
     }
 
+    if (type == "triangle")
+    {
+        return SceneObjectType::TRIANGLE;
+    }
+
     if (type == "rectangle")
     {
         return SceneObjectType::RECTANGLE;
