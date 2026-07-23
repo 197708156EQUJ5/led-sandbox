@@ -110,7 +110,23 @@ void LedDisplay::draw(const std::vector<sandbox::Scene>& scenes)
             case SceneObjectType::TEXT:            
             {
                 const Font& font = *mFontMap.at(object.fontSize.value_or("small"));
-                DrawText(mCanvas, font, x, y, color, nullptr, object.text.value_or("").c_str());
+                const std::string text = object.text.value_or("");
+
+                std::cout << "Text: [" << text << "]\nBytes:";
+
+                for (const unsigned char byte : text)
+                {
+                    std::cout << ' '
+                              << std::hex
+                              << std::uppercase
+                              << std::setw(2)
+                              << std::setfill('0')
+                              << static_cast<int>(byte);
+                }
+
+                std::cout << std::dec << '\n';
+
+                DrawText(mCanvas, font, x, y, color, nullptr, text.c_str());
                 break;
             }            
             default:

@@ -1,0 +1,54 @@
+{
+    "objects": [
+        {
+            "type": "text",
+            "position": {"x": 5, "y": 15},
+            "text": "2010 Round 8",
+            "color": "#cc0000",
+            "fontSize": "regular"
+        },
+        {
+            "type": "text",
+            "position": {"x": 5, "y": 25},
+            "text": "British GP",
+            "color": "#ffffff",
+            "fontSize": "regular"
+        },
+        {
+            "type": "circle",
+            "position": {"x": 20, "y": 45},
+            "radius": 10,
+            "color": "red",
+            "fill": true
+        },
+        {
+            "type": "circle",
+            "position": {"x": 42, "y": 45},
+            "radius": 10,
+            "color": "red",
+            "fill": false
+        },
+        {
+            "type": "circle",
+            "position": {"x": 64, "y": 45},
+            "radius": 10,
+            "color": "red",
+            "fill": false
+        },
+        {
+            "type": "circle",
+            "position": {"x": 86, "y": 45},
+            "radius": 10,
+            "color": "red",
+            "fill": false
+        },
+        {
+            "type": "circle",
+            "position": {"x": 108, "y": 45},
+            "radius": 10,
+            "color": "red",
+            "fill": false
+        }
+
+    ]
+}

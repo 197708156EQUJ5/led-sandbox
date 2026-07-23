@@ -1,0 +1,26 @@
+{
+    "objects": [
+        {
+            "type": "text",
+            "position": {"x": 5, "y": 15},
+            "text": "F1 Playback",
+            "color": "red",
+            "fontSize": "large"
+        },
+        {
+            "type": "text",
+            "position": {"x": 5, "y": 30},
+            "text": "2010 Round 8",
+            "color": "#cc0000",
+            "fontSize": "regular"
+        },
+        {
+            "type": "text",
+            "position": {"x": 5, "y": 40},
+            "text": "British GP",
+            "color": "#ffffff",
+            "fontSize": "regular"
+        }
+
+    ]
+}

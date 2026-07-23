@@ -1,0 +1,33 @@
+{
+    "objects": [
+        {
+            "type": "text",
+            "position": {"x": 2, "y": 7},
+            "text": "Lap 1 of 58",
+            "color": "#cc0000",
+            "fontSize": "small"
+        },
+        {
+            "type": "text",
+            "position": {"x": 0, "y": 13},
+            "text": " 1 \u25B3 0 VET",
+            "color": "#cccccc",
+            "fontSize": "tiny"
+        },
+        {
+            "type": "text",
+            "position": {"x": 0, "y": 19},
+            "text": " 2 S0 HAM +1.345",
+            "color": "#cccccc",
+            "fontSize": "tiny"
+        },
+        {
+            "type": "text",
+            "position": {"x": 0, "y": 25},
+            "text": " 3 S0 SCH +2.345",
+            "color": "#cccccc",
+            "fontSize": "tiny"
+        }
+
+    ]
+}

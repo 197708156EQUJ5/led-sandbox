@@ -1,32 +1,19 @@
 {
     "objects": [
         {
-            "type": "rectangle",
-            "position": {
-                "x": 16,
-                "y": 5
-            },
-            "radius": 4,
-            "color": "#00ff00",
-            "fill": true
+            "type": "text",
+            "position": {"x": 2, "y": 10},
+            "text": "F1 Race Playback",
+            "color": "red",
+            "fontSize": "regular"
         },
         {
-            "type": "circle",
-            "position": {
-                "x": 26,
-                "y": 10
-            },
-            "radius": 4,
-            "color": "red",
-            "fill": true
-        },   
-        {
-            "type": "rectangle",
-            "position": { "x": 64, "y": 0 },
-            "width": 63,
-            "height": 63,
-            "color": "#00ff00",
-            "fill": false
+            "type": "text",
+            "position": {"x": 2, "y": 30},
+            "text": "2010 Round 8",
+            "color": "#cc0000",
+            "fontSize": "regular"
         }
+
     ]
 }
