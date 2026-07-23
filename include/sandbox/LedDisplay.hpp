@@ -16,10 +16,10 @@ namespace sandbox
 
 enum class TriangleDirection
 {
-    North,
-    South,
-    East,
-    West
+    NORTH,
+    SOUTH,
+    EAST,
+    WEST
 };
 
 class LedDisplay
