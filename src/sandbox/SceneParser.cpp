@@ -131,7 +131,7 @@ SceneObject SceneParser::parseObject(const json& objectJson) const
             object.fill = objectJson.at("fill").get<bool>();
             break;
 
-        case SceneObjectType::RECTANGLE:
+        case SceneObjectType::TRIANGLE:
             object.width = objectJson.at("width").get<int>();
             object.height = objectJson.at("height").get<int>();
             object.direction = objectJson.at("direction").get<std::string>();
