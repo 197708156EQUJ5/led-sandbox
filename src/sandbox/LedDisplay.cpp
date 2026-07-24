@@ -128,7 +128,7 @@ void LedDisplay::draw(const std::vector<sandbox::Scene>& scenes)
                 {
                     direction = TriangleDirection::WEST;
                 }
-                std::cout << "enum Direction: " << direction << std::endl;
+                std::cout << "enum Direction: " << static_cast<int>(direction) << std::endl;
                 drawTriangle(x, y, object.width.value_or(0), object.height.value_or(0), direction, color);
                 break;
             }
