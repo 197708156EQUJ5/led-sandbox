@@ -17,11 +17,10 @@
         {
             "type": "triangle",
             "position": {"x": 9, "y": 13},
-            "width": 10,
-            "height": 10,
+            "width": 2,
+            "height": 2,
             "direction": "east",
-            "color": "#666666",
-            "fontSize": "tiny"
+            "color": "#666666"
         },
         {
             "type": "text",
@@ -31,11 +30,12 @@
             "fontSize": "tiny"
         },
         {
-            "type": "text",
+            "type": "triangle",
             "position": {"x": 9, "y": 19},
-            "text": "\u25B3",
-            "color": "#00ff00",
-            "fontSize": "tiny"
+            "width": 2,
+            "height": 2,
+            "direction": "north",
+            "color": "#00ff00"
         },
         {
             "type": "text",

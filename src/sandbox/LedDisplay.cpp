@@ -127,7 +127,7 @@ void LedDisplay::draw(const std::vector<sandbox::Scene>& scenes)
                 {
                     direction = TriangleDirection::WEST;
                 }
-                drawTriangle(x, y, x + object.width.value_or(0), y + object.height.value_or(0), direction, color);
+                drawTriangle(x, y, object.width.value_or(0), object.height.value_or(0), direction, color);
                 break;
             }
             case SceneObjectType::TEXT:            
