@@ -234,8 +234,7 @@ void LedDisplay::drawTriangle(int center_x, int center_y, int width, int height,
             {
                 const int pixel_y = top + row;
 
-                const int extent = std::min(
-                    half_width,
+                const int extent = std::min(half_width,
                     (row * half_width + half_height - 1) / half_height);
 
                 const int edge_left = center_x - extent;
@@ -261,11 +260,8 @@ void LedDisplay::drawTriangle(int center_x, int center_y, int width, int height,
             {
                 const int pixel_y = top + row;
                 const int distance_from_tip = bottom - pixel_y;
-
-                const int extent = std::min(
-                    half_width,
+                const int extent = std::min(half_width, 
                     (distance_from_tip * half_width + half_height - 1) / half_height);
-
                 const int edge_left = center_x - extent;
                 const int edge_right = center_x + extent;
 
@@ -285,26 +281,17 @@ void LedDisplay::drawTriangle(int center_x, int center_y, int width, int height,
 
         case TriangleDirection::EAST:
         {
+            DrawLine(mCanvas, left, top, left, bottom, color);
             for (int column = 0; column < width; ++column)
             {
                 const int pixel_x = left + column;
-
-                const int extent = std::min(
-                    half_height,
+                const int extent = std::min(half_height,
                     (column * half_height + half_width - 1) / half_width);
-
                 const int edge_top = center_y - extent;
                 const int edge_bottom = center_y + extent;
 
-                if (pixel_x == left)
-                {
-                    DrawLine(mCanvas, pixel_x, edge_top, pixel_x, edge_bottom, color);
-                }
-                else
-                {
-                    draw_pixel(pixel_x, edge_top);
-                    draw_pixel(pixel_x, edge_bottom);
-                }
+                draw_pixel(pixel_x, edge_top);
+                draw_pixel(pixel_x, edge_bottom);
             }
 
             break;
@@ -312,83 +299,24 @@ void LedDisplay::drawTriangle(int center_x, int center_y, int width, int height,
 
         case TriangleDirection::WEST:
         {
+            DrawLine(mCanvas, right, top, right, bottom, color);
             for (int column = 0; column < width; ++column)
             {
                 const int pixel_x = left + column;
                 const int distance_from_tip = right - pixel_x;
-
-                const int extent = std::min(
-                    half_height,
+                const int extent = std::min(half_height,
                     (distance_from_tip * half_height + half_width - 1) / half_width);
-
                 const int edge_top = center_y - extent;
                 const int edge_bottom = center_y + extent;
 
-                if (pixel_x == right)
-                {
-                    DrawLine(mCanvas, pixel_x, edge_top, pixel_x, edge_bottom, color);
-                }
-                else
-                {
-                    draw_pixel(pixel_x, edge_top);
-                    draw_pixel(pixel_x, edge_bottom);
-                }
+                draw_pixel(pixel_x, edge_top);
+                draw_pixel(pixel_x, edge_bottom);
             }
 
             break;
         }
     }
 }
-
-/*
-void LedDisplay::drawTriangle(int left, int top, int width, int height, TriangleDirection direction, const Color& color)
-{
-    if (width < 2 || height < 2)
-    {
-        return;
-    }
-
-    const int right = left + width - 1;
-    const int bottom = top + height - 1;
-    const int center_x = left + ((width - 1) / 2);
-    const int center_y = top + ((height - 1) / 2);
-
-    switch (direction)
-    {
-        case TriangleDirection::NORTH:
-        {
-            DrawLine(mCanvas, center_x, top, left, bottom, color);
-            DrawLine(mCanvas, center_x, top, right, bottom, color);
-            DrawLine(mCanvas, left, bottom, right, bottom, color);
-            break;
-        }
-
-        case TriangleDirection::SOUTH:
-        {
-            DrawLine(mCanvas, left, top, right, top, color);
-            DrawLine(mCanvas, left, top, center_x, bottom, color);
-            DrawLine(mCanvas, right, top, center_x, bottom, color);
-            break;
-        }
-
-        case TriangleDirection::EAST:
-        {
-            DrawLine(mCanvas, left, top, right, center_y, color);
-            DrawLine(mCanvas, right, center_y, left, bottom, color);
-            DrawLine(mCanvas, left, top, left, bottom, color);
-            break;
-        }
-
-        case TriangleDirection::WEST:
-        {
-            DrawLine(mCanvas, right, top, left, center_y, color);
-            DrawLine(mCanvas, left, center_y, right, bottom, color);
-            DrawLine(mCanvas, right, top, right, bottom, color);
-            break;
-        }
-    }
-}
-*/
 
 void LedDisplay::clear()
 {
