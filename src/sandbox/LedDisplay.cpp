@@ -109,8 +109,8 @@ void LedDisplay::draw(const std::vector<sandbox::Scene>& scenes)
             }
             case SceneObjectType::TRIANGLE:
             {
-                const std::string directionJson = object.text.value_or("");
-                std::cout << "JSON Direction: " << directionJson << std::endl;
+                const std::string directionJson = object.direction.value_or("");
+                //std::cout << "JSON Direction: " << directionJson << std::endl;
                 TriangleDirection direction = TriangleDirection::NORTH;
                 if (directionJson == "north")
                 {
@@ -128,7 +128,7 @@ void LedDisplay::draw(const std::vector<sandbox::Scene>& scenes)
                 {
                     direction = TriangleDirection::WEST;
                 }
-                std::cout << "enum Direction: " << static_cast<int>(direction) << std::endl;
+                //std::cout << "enum Direction: " << static_cast<int>(direction) << std::endl;
                 drawTriangle(x, y, object.width.value_or(0), object.height.value_or(0), direction, color);
                 break;
             }
