@@ -15,13 +15,22 @@
             "fontSize": "tiny"
         },
         {
+          "type": "rectangle",
+          "position": { "x": 9, "y": 8 },
+          "width": 5,
+          "height": 4,
+          "color": "#222222",
+          "fill": true
+        },
+        {
             "type": "triangle",
-            "position": {"x": 9, "y": 13},
+            "position": {"x": 9, "y": 8},
             "width": 5,
             "height": 5,
-            "direction": "east",
-            "color": "#666666"
+            "direction": "west",
+            "color": "#888888"
         },
+
         {
             "type": "text",
             "position": {"x": 0, "y": 19},
@@ -30,8 +39,16 @@
             "fontSize": "tiny"
         },
         {
+          "type": "rectangle",
+          "position": { "x": 9, "y": 14 },
+          "width": 5,
+          "height": 4,
+          "color": "#222222",
+          "fill": true
+        },
+        {
             "type": "triangle",
-            "position": {"x": 9, "y": 19},
+            "position": {"x": 9, "y": 14},
             "width": 5,
             "height": 5,
             "direction": "north",

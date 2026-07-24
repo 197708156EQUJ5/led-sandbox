@@ -2,23 +2,41 @@
     "objects": [
         {
             "type": "circle",
-            "position": {
-                "x": 16,
-                "y": 5
-            },
+            "position": {"x": 8, "y": 8},
             "radius": 4,
             "color": "#00ff00",
             "fill": true
         },
         {
-            "type": "circle",
-            "position": {
-                "x": 26,
-                "y": 10
-            },
-            "radius": 4,
+            "type": "triangle",
+            "position": {"x": 8, "y": 8},
+            "width": 8,
+            "height": 8,
+            "direction": "north",
             "color": "red",
             "fill": true
+        },
+        {
+          "type": "text",
+          "position": { "x": 0, "y": 40 },
+          "text": "abcdefghijklmnopqrstuvwxyz",
+          "color": "#fffff0",
+          "fontSize": "tiny"
+        },
+        {
+          "type": "text",
+          "position": { "x": 0, "y": 47 },
+          "text": "abcdefghijklmnopqrstuvwxyz",
+          "color": "#ffffff",
+          "fontSize": "small"
+        },
+        {
+          "type": "rectangle",
+          "position": { "x": 64, "y": 0 },
+          "width": 63,
+          "height": 63,
+          "color": "#00ff00",
+          "fill": false
         }
     ]
 }

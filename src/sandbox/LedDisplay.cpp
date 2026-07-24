@@ -195,6 +195,152 @@ void LedDisplay::drawBox(int left, int top, int right, int bottom, const Color& 
     DrawLine(mCanvas, right, top, right, bottom, color);
 }
 
+void LedDisplay::drawTriangle(int center_x, int center_y, int width, int height, TriangleDirection direction, const Color& color)
+{
+    if (width < 3 || height < 3)
+    {
+        return;
+    }
+
+    // Odd dimensions give the triangle a real center pixel.
+    if ((width % 2) == 0)
+    {
+        ++width;
+    }
+
+    if ((height % 2) == 0)
+    {
+        ++height;
+    }
+
+    const int half_width = width / 2;
+    const int half_height = height / 2;
+
+    const int left = center_x - half_width;
+    const int right = center_x + half_width;
+    const int top = center_y - half_height;
+    const int bottom = center_y + half_height;
+
+    const auto draw_pixel = [&](int pixel_x, int pixel_y)
+    {
+        DrawLine(mCanvas, pixel_x, pixel_y, pixel_x, pixel_y, color);
+    };
+
+    switch (direction)
+    {
+        case TriangleDirection::NORTH:
+        {
+            for (int row = 0; row < height; ++row)
+            {
+                const int pixel_y = top + row;
+
+                const int extent = std::min(
+                    half_width,
+                    (row * half_width + half_height - 1) / half_height);
+
+                const int edge_left = center_x - extent;
+                const int edge_right = center_x + extent;
+
+                if (pixel_y == bottom)
+                {
+                    DrawLine(mCanvas, edge_left, pixel_y, edge_right, pixel_y, color);
+                }
+                else
+                {
+                    draw_pixel(edge_left, pixel_y);
+                    draw_pixel(edge_right, pixel_y);
+                }
+            }
+
+            break;
+        }
+
+        case TriangleDirection::SOUTH:
+        {
+            for (int row = 0; row < height; ++row)
+            {
+                const int pixel_y = top + row;
+                const int distance_from_tip = bottom - pixel_y;
+
+                const int extent = std::min(
+                    half_width,
+                    (distance_from_tip * half_width + half_height - 1) / half_height);
+
+                const int edge_left = center_x - extent;
+                const int edge_right = center_x + extent;
+
+                if (pixel_y == top)
+                {
+                    DrawLine(mCanvas, edge_left, pixel_y, edge_right, pixel_y, color);
+                }
+                else
+                {
+                    draw_pixel(edge_left, pixel_y);
+                    draw_pixel(edge_right, pixel_y);
+                }
+            }
+
+            break;
+        }
+
+        case TriangleDirection::EAST:
+        {
+            for (int column = 0; column < width; ++column)
+            {
+                const int pixel_x = left + column;
+
+                const int extent = std::min(
+                    half_height,
+                    (column * half_height + half_width - 1) / half_width);
+
+                const int edge_top = center_y - extent;
+                const int edge_bottom = center_y + extent;
+
+                if (pixel_x == left)
+                {
+                    DrawLine(mCanvas, pixel_x, edge_top, pixel_x, edge_bottom, color);
+                }
+                else
+                {
+                    draw_pixel(pixel_x, edge_top);
+                    draw_pixel(pixel_x, edge_bottom);
+                }
+            }
+
+            break;
+        }
+
+        case TriangleDirection::WEST:
+        {
+            for (int column = 0; column < width; ++column)
+            {
+                const int pixel_x = left + column;
+                const int distance_from_tip = right - pixel_x;
+
+                const int extent = std::min(
+                    half_height,
+                    (distance_from_tip * half_height + half_width - 1) / half_width);
+
+                const int edge_top = center_y - extent;
+                const int edge_bottom = center_y + extent;
+
+                if (pixel_x == right)
+                {
+                    DrawLine(mCanvas, pixel_x, edge_top, pixel_x, edge_bottom, color);
+                }
+                else
+                {
+                    draw_pixel(pixel_x, edge_top);
+                    draw_pixel(pixel_x, edge_bottom);
+                }
+            }
+
+            break;
+        }
+    }
+}
+
+/*
 void LedDisplay::drawTriangle(int left, int top, int width, int height, TriangleDirection direction, const Color& color)
 {
     if (width < 2 || height < 2)
@@ -242,6 +388,7 @@ void LedDisplay::drawTriangle(int left, int top, int width, int height, Triangle
         }
     }
 }
+*/
 
 void LedDisplay::clear()
 {

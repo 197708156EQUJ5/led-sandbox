@@ -25,7 +25,7 @@ url=$1
 curl -X POST "http://$1:8080/api/scene" \
     -H "Content-Type: application/json" \
     --data-binary "@test_data/scene_f1_lap1.json"
-sleep 3
+sleep 7
 curl -X POST "http://$1:8080/api/scene" \
     -H "Content-Type: application/json" \
     --data-binary "@test_data/scene_clear.json"
