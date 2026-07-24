@@ -278,10 +278,8 @@ void LedDisplay::drawTriangle(int center_x, int center_y, int width, int height,
 
             break;
         }
-
-        case TriangleDirection::EAST:
+        case TriangleDirection::WEST:
         {
-            DrawLine(mCanvas, left, top, left, bottom, color);
             for (int column = 0; column < width; ++column)
             {
                 const int pixel_x = left + column;
@@ -290,16 +288,22 @@ void LedDisplay::drawTriangle(int center_x, int center_y, int width, int height,
                 const int edge_top = center_y - extent;
                 const int edge_bottom = center_y + extent;
 
-                draw_pixel(pixel_x, edge_top);
-                draw_pixel(pixel_x, edge_bottom);
+
+                if (pixel_x == right)
+                {
+                    DrawLine(mCanvas, pixel_x, top, pixel_x, bottom, color);
+                }
+                else
+                {
+                    draw_pixel(pixel_x, edge_top);
+                    draw_pixel(pixel_x, edge_bottom);
+                }
             }
 
             break;
         }
-
-        case TriangleDirection::WEST:
+        case TriangleDirection::EAST:
         {
-            DrawLine(mCanvas, right, top, right, bottom, color);
             for (int column = 0; column < width; ++column)
             {
                 const int pixel_x = left + column;
@@ -309,10 +313,16 @@ void LedDisplay::drawTriangle(int center_x, int center_y, int width, int height,
                 const int edge_top = center_y - extent;
                 const int edge_bottom = center_y + extent;
 
-                draw_pixel(pixel_x, edge_top);
-                draw_pixel(pixel_x, edge_bottom);
+                if (pixel_x == left)
+                {
+                    DrawLine(mCanvas, pixel_x, top, pixel_x, bottom, color);
+                }
+                else
+                {
+                    draw_pixel(pixel_x, edge_top);
+                    draw_pixel(pixel_x, edge_bottom);
+                }
             }
-
             break;
         }
     }
