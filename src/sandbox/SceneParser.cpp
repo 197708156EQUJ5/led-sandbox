@@ -1,6 +1,7 @@
 #include "sandbox/SceneParser.hpp"
 
 #include <fstream>
+#include <iostream>
 #include <stdexcept>
 #include <string>
 
